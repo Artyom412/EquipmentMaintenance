@@ -11,7 +11,7 @@ namespace EquipmentMaintenance.ViewModels
 {
     public abstract class ListViewBase<T> : ObservableObject where T : class
     {
-        public AvaloniaList<T> Items = [];
+        public AvaloniaList<T> Items { get; } = [];
 
         public IRelayCommand AddCommand { get; } = null!;
         public IRelayCommand DeleteCommand { get; } = null!;

@@ -18,11 +18,34 @@ public partial class MainWindow : Window
 
         WeakReferenceMessenger.Default.Register<MainWindow, EmployeeDialogMessage>(this, (recipient, message) =>
         {
-            message.Reply(recipient.OpenDialogAsync(message.ViewModel));
+            message.Reply(recipient.OpenDialogEmployeeAsync(message.ViewModel));
+        });
+
+        WeakReferenceMessenger.Default.Register<MainWindow, EquipmentDialogMessage>(this, (recipient, message) =>
+        {
+            message.Reply(recipient.OpenDialogEquipmentAsync(message.ViewModel));
         });
     }
 
-    private async Task<Employee?> OpenDialogAsync(EmployeeObjectViewModel dialogViewModel)
+    private async Task<Equipment?> OpenDialogEquipmentAsync(EquipmentObjectViewModel dialogViewModel)
+    {
+        var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
+        var view = viewLocator?.Build(dialogViewModel);
+
+        if (view is not Window dialogWindow)
+        {
+            return null;
+        }
+
+        dialogWindow.DataContext = dialogViewModel;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        await dialogWindow.ShowDialog(this);
+
+        return dialogViewModel.CreatedEquipment;
+    }
+
+    private async Task<Employee?> OpenDialogEmployeeAsync(EmployeeObjectViewModel dialogViewModel)
     {
         var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
         var view = viewLocator?.Build(dialogViewModel);

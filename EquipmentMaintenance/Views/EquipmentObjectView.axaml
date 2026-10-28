@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EquipmentMaintenance.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="270"
+        x:Class="EquipmentMaintenance.Views.EquipmentObjectView"
+        x:DataType="vm:EquipmentObjectViewModel"
+        Title="EquipmentObjectView"
+        Height="300"
+        Width="400">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
+          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Инвентарный номер" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Number}" PlaceholderText="Например К001" MinWidth="290"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип оборудования" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding EquipmentOptions}" 
+                  SelectedItem="{Binding SelectedEquipmentType}" PlaceholderText="Выбирите из списка" MinWidth="290">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:EquipmentOption">
+                    <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Модель" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Model}" PlaceholderText="G102" MinWidth="290"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Место установки" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Locations}" 
+                  SelectedItem="{Binding SelectedLocation}" DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Дата ввода в эклсплуатацию" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding DateOfCommissioning}"/>
+
+        <Button Grid.Row="5" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}" HorizontalAlignment="Right"/>
+
+    </Grid>
+</Window>

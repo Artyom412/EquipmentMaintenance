@@ -28,4 +28,7 @@ public partial class MainViewModel(INavigationService navigationService) : ViewM
 
     [RelayCommand]
     private void OpenEquipmentList() => CurrentViewModel = _navigationService.NavigateTo<EquipmentListViewModel>();
+
+    [RelayCommand]
+    private void OpenOthersList() => CurrentViewModel = _navigationService.NavigateTo<OthersListViewModel>();
 }

@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:EquipmentMaintenance.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EquipmentMaintenance.Views.OthersListView"
+             x:DataType="vm:OthersListViewModel">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:OthersListViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, Auto">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Text="Наименование"/>
+            <TextBox />
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*">
+            <GroupBox Grid.Column="0" Header="Должности">
+                <TableView CanUserResizeColumns="False">
+                    <TableView.Columns>
+                        <TableViewColumn Header="Наименование"/>
+                    </TableView.Columns>
+                </TableView> 
+            </GroupBox>
+
+            <GroupBox Grid.Column="1" Header="Места размещения">
+                <TableView CanUserResizeColumns="False">
+                    <TableView.Columns>
+                        <TableViewColumn Header="Наименование"/>
+                    </TableView.Columns>
+                </TableView>
+            </GroupBox>
+
+            <GroupBox Grid.Column="2" Header="Еденицы измерения">
+                <TableView CanUserResizeColumns="False">
+                    <TableView.Columns>
+                        <TableViewColumn Header="Наименование"/>
+                    </TableView.Columns>
+                </TableView>
+            </GroupBox>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

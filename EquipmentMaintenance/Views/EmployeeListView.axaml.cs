@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using EquipmentMaintenance.ViewModels;
 
 namespace EquipmentMaintenance.Views
 {
@@ -9,6 +10,14 @@ namespace EquipmentMaintenance.Views
         public EmployeeListView()
         {
             InitializeComponent();
+
+            Loaded += async (sender, e) =>
+            {
+                if (DataContext is EmployeeListViewModel viewModel)
+                {
+                    await viewModel.LoadDataFromServer();
+                }
+            };
         }
     }
 }

@@ -63,8 +63,11 @@ public partial class App : Application
     private static void BuildViewModels(IServiceCollection services)
     {
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<EmployeeListViewModel>();
+        services.AddTransient<EmployeeListViewModel>();
         services.AddTransient<EmployeeObjectViewModel>();
+        services.AddTransient<EquipmentListViewModel>();
+        services.AddTransient<EquipmentObjectViewModel>();
+        services.AddTransient<OthersListViewModel>();
     }
 
     private static void CreateDatabase()

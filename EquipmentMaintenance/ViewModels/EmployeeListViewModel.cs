@@ -14,13 +14,21 @@ namespace EquipmentMaintenance.ViewModels
         private readonly EmployeeObjectViewModel _employeeViewModel = employeeViewModel;
         private readonly ICrudService _crudService = crudService;
 
+        public async Task LoadDataFromServer()
+        {
+            var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle);
+            Items.AddRange(employees);
+        }
+
         protected override async Task AddExecute()
         {
-            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(_employeeViewModel));
+            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(_employeeViewModel)).Response;
 
             if (createdEmployee is not null)
             {
                 await _crudService.AddRecordAsync(createdEmployee);
+                createdEmployee.JobTitle = _employeeViewModel.SelectedJobTitle!;
+                Items.Add(createdEmployee);
             }
         }
 

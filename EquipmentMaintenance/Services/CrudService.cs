@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,13 +18,20 @@ namespace EquipmentMaintenance.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> GetRecordsAsync<T>() where T : class
+        public async Task<IEnumerable<T>> GetRecordsAsync<T>(params Expression<Func<T, object>>[] includes) where T : class
         {
-            var collection = await _context.Set<T>()
-                .AsNoTracking()
-                .ToListAsync();
+            var collection = _context.Set<T>()
+                .AsNoTracking();
 
-            return collection;
+            if (includes is not null)
+            {
+                foreach (var item in includes)
+                {
+                    collection = collection.Include(item);
+                }
+            }
+
+            return await collection.ToListAsync();
         }
     }
 }

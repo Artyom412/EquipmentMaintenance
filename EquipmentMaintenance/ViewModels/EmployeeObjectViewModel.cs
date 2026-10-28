@@ -1,6 +1,8 @@
 ﻿using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
@@ -19,6 +21,7 @@ namespace EquipmentMaintenance.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial string? Name { get; set; }
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial JobTitle? SelectedJobTitle { get; set; }
 
         public Employee? CreatedEmployee { get; private set; }
@@ -38,6 +41,7 @@ namespace EquipmentMaintenance.ViewModels
         protected override void CancelExecute()
         {
             CreatedEmployee = null;
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }
 
         protected override void ConfirmExecute()
@@ -49,6 +53,7 @@ namespace EquipmentMaintenance.ViewModels
             };
 
             CreatedEmployee = employee;
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }
     }
 }
