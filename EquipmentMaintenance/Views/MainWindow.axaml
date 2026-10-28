@@ -1,0 +1,41 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EquipmentMaintenance.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="EquipmentMaintenance.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="EquipmentMaintenance">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <DockPanel LastChildFill="False">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Завершить работу" Command="{Binding ApplicationShutdownCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Справочники">
+                <MenuItem Header="Сотрудники" Command="{Binding OpenEmployeeListCommand}"/>
+                <MenuItem Header="Оборудование"/>
+                <MenuItem Header="Материалы"/>
+                <MenuItem Header="Подразделения"/>
+            </MenuItem>
+            <MenuItem Header="Заявки"/>
+            <MenuItem Header="Отчеты">
+                <MenuItem Header="По количемту заявок"/>
+                <MenuItem Header="По загрузке исполнителей"/>
+                <MenuItem Header="По расходу материалов"/>
+                <MenuItem Header="По повторяющимся неисправностям"/>
+            </MenuItem>
+        </Menu>
+
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+    </DockPanel>
+
+</Window>

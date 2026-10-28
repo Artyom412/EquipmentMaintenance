@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace EquipmentMaintenance.Models
+{
+    public class Material
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public required string ItemNumber { get; set; }
+        public required string Name { get; set; }
+
+        public Guid UnitOfMeasurementId { get; set; }
+        public UnitOfMeasurement UnitOfMeasurement { get; set; } = null!;
+
+        public int Remainder { get; set; }
+        public int ConsumptionRate { get; set; }
+
+        public List<Statement> Statements { get; set; } = [];
+    }
+}
