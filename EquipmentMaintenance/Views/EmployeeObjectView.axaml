@@ -3,21 +3,24 @@
         xmlns:vm="using:EquipmentMaintenance.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="405" d:DesignHeight="140"
+        mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="180"
         x:Class="EquipmentMaintenance.Views.EmployeeObjectView"
         x:DataType="vm:EmployeeObjectViewModel"
         Title="EmployeeObjectView"
-        Width="405" Height="140">
-    <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
+        Width="430" Height="180">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="ФИО" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" PlaceholderText="Иванов" MinWidth="290"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Должность" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding JobTitles}" 
                   SelectedItem="{Binding SelectedJobTitle}" DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Подразделение" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Subdivisions}" 
+                  SelectedItem="{Binding SelectedSubdivision}" DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
 
-        <Button Grid.Row="2" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}"/>
+        <Button Grid.Row="3" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
+        <Button Grid.Row="3" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}"/>
 
     </Grid>
 </Window>

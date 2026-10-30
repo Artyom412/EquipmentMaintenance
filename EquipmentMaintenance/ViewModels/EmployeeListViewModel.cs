@@ -9,25 +9,29 @@ using EquipmentMaintenance.Messages;
 
 namespace EquipmentMaintenance.ViewModels
 {
-    public partial class EmployeeListViewModel(EmployeeObjectViewModel employeeViewModel, ICrudService crudService) : ListViewBase<Employee>
+    public partial class EmployeeListViewModel(Func<EmployeeObjectViewModel> employeeVmFactory, ICrudService crudService) : ListViewBase<Employee>
     {
-        private readonly EmployeeObjectViewModel _employeeViewModel = employeeViewModel;
+        private readonly Func<EmployeeObjectViewModel> _employeeVmFactory = employeeVmFactory;
         private readonly ICrudService _crudService = crudService;
 
         public async Task LoadDataFromServer()
         {
-            var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle);
+            var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle, x => x.Subdivision);
+
             Items.AddRange(employees);
         }
 
         protected override async Task AddExecute()
         {
-            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(_employeeViewModel)).Response;
+            var employeeViewModel = _employeeVmFactory();
+
+            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(employeeViewModel)).Response;
 
             if (createdEmployee is not null)
             {
                 await _crudService.AddRecordAsync(createdEmployee);
-                createdEmployee.JobTitle = _employeeViewModel.SelectedJobTitle!;
+                createdEmployee.JobTitle = employeeViewModel.SelectedJobTitle!;
+                createdEmployee.Subdivision = employeeViewModel.SelectedSubdivision!;
                 Items.Add(createdEmployee);
             }
         }

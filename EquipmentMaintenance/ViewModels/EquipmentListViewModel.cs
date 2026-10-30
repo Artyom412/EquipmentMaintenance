@@ -9,18 +9,22 @@ using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
 {
-    public partial class EquipmentListViewModel(EquipmentObjectViewModel viewModel, ICrudService crudService) : ListViewBase<Equipment>
+    public partial class EquipmentListViewModel(Func<EquipmentObjectViewModel> viewModel, ICrudService crudService) : ListViewBase<Equipment>
     {
-        private readonly EquipmentObjectViewModel _equipmentViewModel = viewModel;
+        private readonly Func<EquipmentObjectViewModel> _equipmentVmFactory = viewModel;
         private readonly ICrudService _crudService = crudService;
 
         protected override async Task AddExecute()
         {
-            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(_equipmentViewModel));
+            var employeeViewModel = _equipmentVmFactory();
+
+            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel));
 
             if (createdEquipment is not null)
             {
                 await _crudService.AddRecordAsync(createdEquipment);
+                createdEquipment.Location = employeeViewModel.SelectedLocation!;
+                Items.Add(createdEquipment);
             }
         }
 

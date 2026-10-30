@@ -1,4 +1,5 @@
 ﻿using Avalonia.Collections;
+using Avalonia.Controls.Primitives;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -20,22 +21,32 @@ namespace EquipmentMaintenance.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial string? Name { get; set; }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial JobTitle? SelectedJobTitle { get; set; }
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
+        public partial Subdivision? SelectedSubdivision { get; set; }
+
         public Employee? CreatedEmployee { get; private set; }
 
         public AvaloniaList<JobTitle> JobTitles { get; } = [];
+        public AvaloniaList<Subdivision> Subdivisions { get; } = [];
 
         protected override bool CanExecute() =>
             !string.IsNullOrWhiteSpace(Name)
-            && SelectedJobTitle is not null;
+            && SelectedJobTitle is not null
+            && SelectedSubdivision is not null;
 
         public async Task LoadDataFromServer()
         {
             var jobTitles = await _crudService.GetRecordsAsync<JobTitle>();
+            var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
+
             JobTitles.AddRange(jobTitles);
+            Subdivisions.AddRange(subdivisions);
         }
 
         protected override void CancelExecute()
@@ -49,6 +60,7 @@ namespace EquipmentMaintenance.ViewModels
             var employee = new Employee
             {
                 Name = Name!,
+                SubdivisionId = SelectedSubdivision!.Id,
                 JobTitleId = SelectedJobTitle!.Id,
             };
 

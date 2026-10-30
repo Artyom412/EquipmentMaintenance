@@ -65,9 +65,17 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
         services.AddTransient<EmployeeListViewModel>();
         services.AddTransient<EmployeeObjectViewModel>();
+        services.AddSingleton<Func<EmployeeObjectViewModel>>(provider =>
+            () => provider.GetRequiredService<EmployeeObjectViewModel>());
         services.AddTransient<EquipmentListViewModel>();
         services.AddTransient<EquipmentObjectViewModel>();
+        services.AddSingleton<Func<EquipmentObjectViewModel>>(provider =>
+            () => provider.GetRequiredService<EquipmentObjectViewModel>());
         services.AddTransient<OthersListViewModel>();
+        services.AddTransient<SubdivisionListViewModel>();
+        services.AddTransient<SubdivisionObjectViewModel>();
+        services.AddSingleton<Func<SubdivisionObjectViewModel>>(provider =>
+            () => provider.GetRequiredService<SubdivisionObjectViewModel>());
     }
 
     private static void CreateDatabase()

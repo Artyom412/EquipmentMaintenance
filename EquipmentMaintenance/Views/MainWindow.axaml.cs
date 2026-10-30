@@ -7,6 +7,7 @@ using EquipmentMaintenance.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tmds.DBus.Protocol;
 
 namespace EquipmentMaintenance.Views;
 
@@ -24,6 +25,11 @@ public partial class MainWindow : Window
         WeakReferenceMessenger.Default.Register<MainWindow, EquipmentDialogMessage>(this, (recipient, message) =>
         {
             message.Reply(recipient.OpenDialogEquipmentAsync(message.ViewModel));
+        });
+
+        WeakReferenceMessenger.Default.Register<MainWindow, SubdivisionDialogMessage>(this, (recipient, message) =>
+        {
+            message.Reply(recipient.OpenDialogSubdivisionAsync(message.ViewModel));
         });
     }
 
@@ -61,5 +67,23 @@ public partial class MainWindow : Window
         await dialogWindow.ShowDialog(this);
 
         return dialogViewModel.CreatedEmployee;
+    }
+
+    private async Task<Subdivision?> OpenDialogSubdivisionAsync(SubdivisionObjectViewModel dialogViewModel)
+    {
+        var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
+        var view = viewLocator?.Build(dialogViewModel);
+
+        if (view is not Window dialogWindow)
+        {
+            return null;
+        }
+
+        dialogWindow.DataContext = dialogViewModel;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        await dialogWindow.ShowDialog(this);
+
+        return dialogViewModel.CreatedSubdivision;
     }
 }

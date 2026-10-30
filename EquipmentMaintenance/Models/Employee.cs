@@ -12,6 +12,7 @@ namespace EquipmentMaintenance.Models
         public Guid JobTitleId { get; set; }
         public JobTitle JobTitle { get; set; } = null!;
 
-        public List<Subdivision> Subdivisions { get; set; } = [];
+        public Guid SubdivisionId { get; set; }
+        public Subdivision Subdivision { get; set; } = null!;
     }
 }

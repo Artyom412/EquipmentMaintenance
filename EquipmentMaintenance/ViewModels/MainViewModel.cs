@@ -31,4 +31,7 @@ public partial class MainViewModel(INavigationService navigationService) : ViewM
 
     [RelayCommand]
     private void OpenOthersList() => CurrentViewModel = _navigationService.NavigateTo<OthersListViewModel>();
+
+    [RelayCommand]
+    private void OpenSubdivisionList() => CurrentViewModel = _navigationService.NavigateTo<SubdivisionListViewModel>();
 }

@@ -10,7 +10,6 @@ namespace EquipmentMaintenance.Models
         public required string Name { get; set; }
         public required string Code { get; set; }
 
-        public Guid EmployeeId { get; set; }
-        public Employee Employee { get; set; } = null!;
+        public List<Employee> Employees { get; set; } = [];
     }
 }
