@@ -57,8 +57,7 @@ namespace EquipmentMaintenance.ViewModels
             && !string.IsNullOrWhiteSpace(Model)
             && SelectedEquipmentType is not null
             && SelectedLocation is not null
-            && DateOfCommissioning is not null
-            && DateOfCommissioning.Value.Date >= DateTime.Now.Date;
+            && DateOfCommissioning is not null;
 
 
         protected override void CancelExecute()

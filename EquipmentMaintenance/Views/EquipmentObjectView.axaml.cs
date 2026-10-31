@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.Messaging;
+using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.ViewModels;
 
 namespace EquipmentMaintenance.Views
@@ -10,6 +12,12 @@ namespace EquipmentMaintenance.Views
         public EquipmentObjectView()
         {
             InitializeComponent();
+
+            WeakReferenceMessenger.Default.Register<EquipmentObjectView, CloseDialogMessage>(this, (recipient, message) =>
+            {
+                recipient.Close();
+                WeakReferenceMessenger.Default.Unregister<CloseDialogMessage>(recipient);
+            });
 
             Loaded += async (sender, e) =>
             {

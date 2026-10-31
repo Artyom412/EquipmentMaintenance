@@ -17,11 +17,11 @@
             <Button Grid.Column="3" Content="Удалить" Command="{Binding DeleteCommand}" HorizontalAlignment="Right"/>
         </Grid>
 
-        <TableView Grid.Row="1" CanUserResizeColumns="False">
+        <TableView ItemsSource="{Binding Items}" Grid.Row="1" CanUserResizeColumns="False">
             <TableView.Columns>
-                <TableViewColumn Header="Номер"/>
-                <TableViewColumn Header="Модель"/>
-                <TableViewColumn Header="Место установки"/>
+                <TableViewColumn Header="Номер" Binding="{Binding InventoryNumber}"/>
+                <TableViewColumn Header="Модель" Binding="{Binding Model}"/>
+                <TableViewColumn Header="Место установки" Binding="{Binding Location.Name}"/>
             </TableView.Columns>
         </TableView>
     </Grid>

@@ -14,6 +14,12 @@ namespace EquipmentMaintenance.ViewModels
         private readonly ICrudService _crudService = crudService;
         private readonly Func<SubdivisionObjectViewModel> _subdivisionVmFactory = subdivisionVmFactory;
 
+        public async Task LoadDataFromServer()
+        {
+            var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
+            Items.AddRange(subdivisions);
+        }
+
         protected async override Task AddExecute()
         {
             var subdivisionViewModel = _subdivisionVmFactory();

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
 {
-    public partial class EquipmentListViewModel(Func<EquipmentObjectViewModel> viewModel, ICrudService crudService) : ListViewBase<Equipment>
+    public partial class EquipmentListViewModel(Func<EquipmentObjectViewModel> equipmentVmFactory, ICrudService crudService) : ListViewBase<Equipment>
     {
-        private readonly Func<EquipmentObjectViewModel> _equipmentVmFactory = viewModel;
+        private readonly Func<EquipmentObjectViewModel> _equipmentVmFactory = equipmentVmFactory;
         private readonly ICrudService _crudService = crudService;
 
         protected override async Task AddExecute()
@@ -26,6 +26,12 @@ namespace EquipmentMaintenance.ViewModels
                 createdEquipment.Location = employeeViewModel.SelectedLocation!;
                 Items.Add(createdEquipment);
             }
+        }
+
+        public async Task LoadDataFromServer()
+        {
+            var equipments = await _crudService.GetRecordsAsync<Equipment>();
+            Items.AddRange(equipments);
         }
 
         protected override void DeleteExecute()

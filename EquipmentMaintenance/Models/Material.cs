@@ -13,7 +13,6 @@ namespace EquipmentMaintenance.Models
         public Guid UnitOfMeasurementId { get; set; }
         public UnitOfMeasurement UnitOfMeasurement { get; set; } = null!;
 
-        public int Remainder { get; set; }
         public int ConsumptionRate { get; set; }
 
         public List<Statement> Statements { get; set; } = [];
