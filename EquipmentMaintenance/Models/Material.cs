@@ -16,5 +16,6 @@ namespace EquipmentMaintenance.Models
         public int ConsumptionRate { get; set; }
 
         public List<Statement> Statements { get; set; } = [];
+        public List<MaterialTransaction> MaterialTransactions { get; set; } = [];
     }
 }

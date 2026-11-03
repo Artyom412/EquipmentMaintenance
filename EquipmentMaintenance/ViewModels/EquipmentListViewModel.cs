@@ -18,7 +18,7 @@ namespace EquipmentMaintenance.ViewModels
         {
             var employeeViewModel = _equipmentVmFactory();
 
-            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel));
+            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel)).Response;
 
             if (createdEquipment is not null)
             {

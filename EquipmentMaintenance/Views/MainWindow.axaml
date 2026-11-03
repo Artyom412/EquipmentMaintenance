@@ -23,7 +23,7 @@
             <MenuItem Header="Справочники">
                 <MenuItem Header="Сотрудники" Command="{Binding OpenEmployeeListCommand}"/>
                 <MenuItem Header="Оборудование" Command="{Binding OpenEquipmentListCommand}"/>
-                <MenuItem Header="Материалы"/>
+                <MenuItem Header="Материалы" Command="{Binding OpenMaterialListCommand}"/>
                 <MenuItem Header="Подразделения" Command="{Binding OpenSubdivisionListCommand}"/>
                 <MenuItem Header="Прочее" Command="{Binding OpenOthersListCommand}"/>
             </MenuItem>

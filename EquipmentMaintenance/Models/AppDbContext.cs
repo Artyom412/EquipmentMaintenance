@@ -15,6 +15,7 @@ namespace EquipmentMaintenance.Models
         public DbSet<Statement> Statements => Set<Statement>();
         public DbSet<Subdivision> Subdivisions => Set<Subdivision>();
         public DbSet<UnitOfMeasurement> Units => Set<UnitOfMeasurement>();
+        public DbSet<MaterialTransaction> MaterialTransactions => Set<MaterialTransaction>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -14,11 +14,24 @@ namespace EquipmentMaintenance.ViewModels
         private readonly ICrudService _crudService = crudService;
         private readonly Func<MaterialObjectViewModel> _materialVmFactory = materialVmFactory;
 
+        public async Task LoadDataFromServer()
+        {
+            var materials = await _crudService.GetRecordsAsync<Material>(x => x.UnitOfMeasurement);
+            Items.AddRange(materials);
+        }
+
         protected override async Task AddExecute()
         {
             var materialViewModel = _materialVmFactory();
 
             Material? createdMaterial = await WeakReferenceMessenger.Default.Send(new MaterialDialogMessage(materialViewModel)).Response;
+
+            if (createdMaterial is not null)
+            {
+                await _crudService.AddRecordAsync(createdMaterial);
+                createdMaterial.UnitOfMeasurement = materialViewModel.SelectedMeasure!;   
+                Items.Add(createdMaterial);
+            }
         }
 
         protected override void DeleteExecute()

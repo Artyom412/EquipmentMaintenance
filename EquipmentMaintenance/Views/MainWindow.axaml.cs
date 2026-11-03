@@ -31,6 +31,29 @@ public partial class MainWindow : Window
         {
             message.Reply(recipient.OpenDialogSubdivisionAsync(message.ViewModel));
         });
+
+        WeakReferenceMessenger.Default.Register<MainWindow, MaterialDialogMessage>(this, (recipient, message) =>
+        {
+            message.Reply(recipient.OpenDialogMaterialAsync(message.ViewModel));
+        });
+    }
+
+    private async Task<Material?> OpenDialogMaterialAsync(MaterialObjectViewModel dialogViewModel)
+    {
+        var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
+        var view = viewLocator?.Build(dialogViewModel);
+
+        if (view is not Window dialogWindow)
+        {
+            return null;
+        }
+
+        dialogWindow.DataContext = dialogViewModel;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        await dialogWindow.ShowDialog(this);
+
+        return dialogViewModel.CreatedMaterial;
     }
 
     private async Task<Equipment?> OpenDialogEquipmentAsync(EquipmentObjectViewModel dialogViewModel)
@@ -86,4 +109,5 @@ public partial class MainWindow : Window
 
         return dialogViewModel.CreatedSubdivision;
     }
+
 }
