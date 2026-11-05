@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace EquipmentMaintenance.Views
 {
-    public partial class TransactionTypeObjectView : UserControl
+    public partial class StatementListView : UserControl
     {
-        public TransactionTypeObjectView()
+        public StatementListView()
         {
             InitializeComponent();
         }

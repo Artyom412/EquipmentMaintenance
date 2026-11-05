@@ -36,6 +36,29 @@ public partial class MainWindow : Window
         {
             message.Reply(recipient.OpenDialogMaterialAsync(message.ViewModel));
         });
+
+        WeakReferenceMessenger.Default.Register<MainWindow, MaterialTransactionDialogMessage>(this, (recipient, message) =>
+        {
+            message.Reply(recipient.OpenDialogMaterialTransactionAsync(message.ViewModel));
+        });
+    }
+
+    private async Task<MaterialTransaction?> OpenDialogMaterialTransactionAsync(MaterialTransactionObjectViewModel dialogViewModel)
+    {
+        var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
+        var view = viewLocator?.Build(dialogViewModel);
+
+        if (view is not Window dialogWindow)
+        {
+            return null;
+        }
+
+        dialogWindow.DataContext = dialogViewModel;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        await dialogWindow.ShowDialog(this);
+
+        return dialogViewModel.CreatedMaterialTransaction;
     }
 
     private async Task<Material?> OpenDialogMaterialAsync(MaterialObjectViewModel dialogViewModel)

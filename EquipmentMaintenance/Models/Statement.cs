@@ -7,6 +7,7 @@ namespace EquipmentMaintenance.Models
     public class Statement
     {
         public Guid Id { get; set; } = Guid.NewGuid();
+        public required string Name { get; set; }
         public DateTime Arrival { get; set; }
 
         public Guid SubdivisionId { get; set; }

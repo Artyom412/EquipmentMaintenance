@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:EquipmentMaintenance.ViewModels"
+             xmlns:models="using:EquipmentMaintenance.Models"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EquipmentMaintenance.Views.StatementListView"
+             x:DataType="vm:StatementListViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:StatementListViewModel}">
+
+    <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Items}" x:CompileBindings="False">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <DataTemplate DataType="{x:Type models:Statement }">
+                <Border Width="200" Height="250" Margin="10" Padding="15" Background="#FDFDFD"
+                        CornerRadius="8" BoxShadow="0 4 10 0 #20000000">
+                    <Grid RowDefinitions="Auto, *, Auto, Auto">
+                    <!-- Заголовок карточки -->
+                    <TextBlock Grid.Row="0" 
+                               Text="{Binding $parent[UserControl].DataContext.Name}"/>
+                    
+                    <!-- Описание/Контент -->
+                    <TextBlock Grid.Row="1" 
+                               Text="{Binding $parent[UserControl].DataContext.Priority}" 
+                               Margin="0,10,0,0"/>
+
+                    <TextBlock Grid.Row="2" 
+                               Text="{Binding $parent[UserControl].DataContext.CompletionDate}" 
+                               Margin="0,10,0,0"/>
+                    
+                    <!-- Действие/Нижняя часть -->
+                    <Button Grid.Row="3" 
+                            Content="Открыть" 
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Center"/>
+                </Grid>
+                </Border>
+            </DataTemplate>
+
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

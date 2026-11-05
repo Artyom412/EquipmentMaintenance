@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EquipmentMaintenance.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="221"
+        x:Class="EquipmentMaintenance.Views.MaterialTransactionObjectView"
+        x:DataType="vm:MaterialTransactionObjectViewModel"
+        Title="MaterialTransactionObjectView"
+        Width="430" Height="221">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
+          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Дата операции" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Grid.Row="0" Grid.Column="1" SelectedDate="{Binding Date}" MinWidth="290"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Материал" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Materials}" 
+                  SelectedItem="{Binding SelectedMaterial}" DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Тип" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TransationOptions}" 
+                  SelectedItem="{Binding SelectedType}" PlaceholderText="Выбирите из списка" MinWidth="290">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:TransationOption">
+                    <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Количество" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <NumericUpDown Grid.Row="3" Grid.Column="1" Minimum="1" Maximum="2000000" Increment="1" Value="{Binding Quantity}"/>
+
+        <Button Grid.Row="4" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
+        <Button Grid.Row="4" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}"/>
+
+    </Grid>
+</Window>

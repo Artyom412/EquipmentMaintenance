@@ -26,6 +26,7 @@
                 <MenuItem Header="Материалы" Command="{Binding OpenMaterialListCommand}"/>
                 <MenuItem Header="Подразделения" Command="{Binding OpenSubdivisionListCommand}"/>
                 <MenuItem Header="Прочее" Command="{Binding OpenOthersListCommand}"/>
+                <MenuItem Header="Накладная" Command="{Binding OpenMaterialTransactionListCommand}"/>
             </MenuItem>
             <MenuItem Header="Заявки"/>
             <MenuItem Header="Отчеты">

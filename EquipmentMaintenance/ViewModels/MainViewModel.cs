@@ -40,5 +40,5 @@ public partial class MainViewModel(INavigationService navigationService) : ViewM
     private void OpenMaterialList() => CurrentViewModel = _navigationService.NavigateTo<MaterialListViewModel>();
 
     [RelayCommand]
-    private void OpenTransactionList() => CurrentViewModel = _navigationService.NavigateTo<MaterialTransactionListViewModel>();
+    private void OpenMaterialTransactionList() => CurrentViewModel = _navigationService.NavigateTo<MaterialTransactionListViewModel>();
 }

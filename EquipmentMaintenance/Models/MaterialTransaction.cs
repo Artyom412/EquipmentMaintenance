@@ -12,5 +12,12 @@ namespace EquipmentMaintenance.Models
         public Material Material { get; set; } = null!;
         public TransactionType TransactionType { get; set; }
         public int Quantity { get; set; }
+
+        public string TypeDescription => TransactionType switch
+        {
+            TransactionType.Income => "Приход",
+            TransactionType.Expense => "Расход",
+            _ => throw new NotImplementedException()
+        };
     }
 }

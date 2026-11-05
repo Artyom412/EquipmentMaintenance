@@ -18,16 +18,21 @@ namespace EquipmentMaintenance.ViewModels
         private readonly ICrudService _crudService = crudService;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial DateTimeOffset? Date { get; set; }
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial Material? SelectedMaterial { get; set; }
 
         [ObservableProperty]
-        public partial TransactionType? SelectedType { get; set; }
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
+        public partial TransationOption? SelectedType { get; set; }
 
         [ObservableProperty]
         public partial int Quantity { get; set; }
+
+        public MaterialTransaction? CreatedMaterialTransaction { get; private set; }
 
         public AvaloniaList<Material> Materials { get; set; } = [];
 
@@ -42,7 +47,6 @@ namespace EquipmentMaintenance.ViewModels
             && SelectedMaterial is not null
             && SelectedType is not null;
 
-
         public async Task LoadDataFromServer()
         {
             var materials = await _crudService.GetRecordsAsync<Material>();
@@ -51,12 +55,22 @@ namespace EquipmentMaintenance.ViewModels
 
         protected override void CancelExecute()
         {
-            
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }
 
         protected override void ConfirmExecute()
         {
-            
+            var materialTransaction = new MaterialTransaction
+            {
+                Date = DateOnly.FromDateTime(Date!.Value.Date),
+                MaterialId = SelectedMaterial!.Id,
+                TransactionType = SelectedType!.ValueType,
+                Quantity = Quantity
+            };
+
+            CreatedMaterialTransaction = materialTransaction;
+
+            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }
     }
 
