@@ -1,9 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EquipmentMaintenance.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentMaintenance.ViewModels
 {

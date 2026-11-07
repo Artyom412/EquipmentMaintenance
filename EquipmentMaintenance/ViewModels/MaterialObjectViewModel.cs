@@ -4,11 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace EquipmentMaintenance.ViewModels
 {

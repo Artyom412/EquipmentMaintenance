@@ -3,11 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels

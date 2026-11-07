@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
 using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.ViewModels;

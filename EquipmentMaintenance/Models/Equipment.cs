@@ -1,7 +1,4 @@
-﻿using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace EquipmentMaintenance.Models
 {

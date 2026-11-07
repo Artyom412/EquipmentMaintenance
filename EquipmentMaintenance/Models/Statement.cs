@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EquipmentMaintenance.Models
 {
@@ -16,7 +15,7 @@ namespace EquipmentMaintenance.Models
         public Guid EquipmentId { get; set; }
         public Equipment Equipment { get; set; } = null!;
 
-        public required string Description { get; set; }
+        public required string? Description { get; set; }
         public Priority Priority { get; set; }
 
         public Guid EmployeeId { get; set; }
@@ -24,8 +23,17 @@ namespace EquipmentMaintenance.Models
 
         public DateTime? CompletionDate { get; set; }
 
-        public List<Material> Materials { get; set; } = [];
+        public Guid MaterialId { get; set; }
+        public Material Material { get; set; } = null!;
 
         public string? Result { get; set; }
+
+        public string PriorityDescription => Priority switch
+        {
+            Priority.High => "Высокий",
+            Priority.Low => "Низкий",
+            _ => throw new NotImplementedException()
+        };
+
     }
 }

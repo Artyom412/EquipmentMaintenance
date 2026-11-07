@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using EquipmentMaintenance.Models;
@@ -90,6 +89,11 @@ public partial class App : Application
         services.AddTransient<MaterialTransactionObjectViewModel>();
         services.AddSingleton<Func<MaterialTransactionObjectViewModel>>(provider =>
             () => provider.GetRequiredService<MaterialTransactionObjectViewModel>());
+
+        services.AddTransient<StatementListViewModel>();
+        services.AddTransient<StatementObjectViewModel>();
+        services.AddTransient<Func<StatementObjectViewModel>>(provider => 
+            () => provider.GetRequiredService<StatementObjectViewModel>());
     }
 
     private static void CreateDatabase()

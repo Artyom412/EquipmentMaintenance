@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EquipmentMaintenance.Models
+﻿namespace EquipmentMaintenance.Models
 {
     public enum TransactionType
     {

@@ -28,7 +28,7 @@
                 <MenuItem Header="Прочее" Command="{Binding OpenOthersListCommand}"/>
                 <MenuItem Header="Накладная" Command="{Binding OpenMaterialTransactionListCommand}"/>
             </MenuItem>
-            <MenuItem Header="Заявки"/>
+            <MenuItem Header="Заявки" Command="{Binding OpenStatementsListCommand}"/>
             <MenuItem Header="Отчеты">
                 <MenuItem Header="По количемту заявок"/>
                 <MenuItem Header="По загрузке исполнителей"/>

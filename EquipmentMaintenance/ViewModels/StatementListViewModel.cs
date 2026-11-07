@@ -1,15 +1,16 @@
-﻿using EquipmentMaintenance.Models;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using EquipmentMaintenance.Messages;
+using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
 {
-    public partial class StatementListViewModel(ICrudService crudService) : ListViewBase<Statement>
+    public partial class StatementListViewModel(ICrudService crudService, Func<StatementObjectViewModel> statementObjectVmFactory) : ListViewBase<Statement>
     {
         private readonly ICrudService _crudService = crudService;
+        private readonly Func<StatementObjectViewModel> _statementObjectVmFactory = statementObjectVmFactory;
 
         public async Task LoadDataFromServer()
         {
@@ -17,9 +18,21 @@ namespace EquipmentMaintenance.ViewModels
             Items.AddRange(statements);
         }
 
-        protected override Task AddExecute()
+        protected async override Task AddExecute()
         {
-            throw new NotImplementedException();
+            var viewModel = _statementObjectVmFactory();
+
+            Statement? statement = await WeakReferenceMessenger.Default.Send(new StatementDialogMessage(viewModel)).Response;
+
+            if (statement is not null)
+            {
+                await _crudService.AddRecordAsync(statement);
+                statement.Subdivision = viewModel.SelectedSubdivision!;
+                statement.Equipment = viewModel.SelectedEquipment!;
+                statement.Employee = viewModel.SelectedEmployee!;
+                statement.Material = viewModel.SelectedMaterial!;
+                Items.Add(statement);
+            }
         }
 
         protected override void DeleteExecute()

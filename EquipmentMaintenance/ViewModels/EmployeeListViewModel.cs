@@ -1,11 +1,9 @@
-﻿using EquipmentMaintenance.Models;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using EquipmentMaintenance.Messages;
+using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Messaging;
-using EquipmentMaintenance.Messages;
 
 namespace EquipmentMaintenance.ViewModels
 {

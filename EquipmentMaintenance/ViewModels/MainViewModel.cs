@@ -1,10 +1,8 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EquipmentMaintenance.Services;
-using System.ComponentModel;
 
 namespace EquipmentMaintenance.ViewModels;
 
@@ -41,4 +39,7 @@ public partial class MainViewModel(INavigationService navigationService) : ViewM
 
     [RelayCommand]
     private void OpenMaterialTransactionList() => CurrentViewModel = _navigationService.NavigateTo<MaterialTransactionListViewModel>();
+
+    [RelayCommand]
+    private void OpenStatementsList() => CurrentViewModel = _navigationService.NavigateTo<StatementListViewModel>();
 }

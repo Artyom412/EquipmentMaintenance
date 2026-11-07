@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EquipmentMaintenance.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="473"
+        x:Class="EquipmentMaintenance.Views.StatementObjectView"
+        x:DataType="vm:StatementObjectViewModel"
+        Title="StatementObjectView"
+        Width="450" Height="473">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
+          VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" PlaceholderText="Например К001" MinWidth="290"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата поступления" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Arrival}" MinWidth="290"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Подразделение" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Subdivisions}" 
+                  SelectedItem="{Binding SelectedSubdivision}" 
+                  DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Оборудование" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Equipments}" 
+                  SelectedItem="{Binding SelectedEquipment}" 
+                  DisplayMemberBinding="{Binding Model}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Приоритет" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding PriorityOptions}" 
+                  SelectedItem="{Binding SelectedPriority}" PlaceholderText="Выбирите из списка" MinWidth="290">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:PriorityOption">
+                    <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Описание" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Description}" PlaceholderText="Например И001" MinWidth="290"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Дата завершения" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Grid.Row="6" Grid.Column="1" SelectedDate="{Binding CompletionDate}" MinWidth="290"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Материал" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{Binding Materials}" 
+                  SelectedItem="{Binding SelectedMaterial}" 
+                  DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Ответственный" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{Binding Employees}" 
+                  SelectedItem="{Binding SelectedEmployee}" 
+                  DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
+        <TextBlock Grid.Row="9" Grid.Column="0" Text="Результат" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Result}" MinWidth="290"/>
+
+        <Button Grid.Row="10" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
+        <Button Grid.Row="10" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}" HorizontalAlignment="Right"/>
+
+    </Grid>
+</Window>

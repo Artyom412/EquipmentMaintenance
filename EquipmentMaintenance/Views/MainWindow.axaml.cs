@@ -7,7 +7,6 @@ using EquipmentMaintenance.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Tmds.DBus.Protocol;
 
 namespace EquipmentMaintenance.Views;
 
@@ -41,6 +40,29 @@ public partial class MainWindow : Window
         {
             message.Reply(recipient.OpenDialogMaterialTransactionAsync(message.ViewModel));
         });
+
+        WeakReferenceMessenger.Default.Register<MainWindow, StatementDialogMessage>(this, (recipient, message) =>
+        {
+            message.Reply(recipient.OpenDialogStatementAsync(message.ViewModel));
+        });
+    }
+
+    private async Task<Statement?> OpenDialogStatementAsync(StatementObjectViewModel dialogViewModel)
+    {
+        var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
+        var view = viewLocator?.Build(dialogViewModel);
+
+        if (view is not Window dialogWindow)
+        {
+            return null;
+        }
+
+        dialogWindow.DataContext = dialogViewModel;
+        dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        await dialogWindow.ShowDialog(this);
+
+        return dialogViewModel.CreatedStatement;
     }
 
     private async Task<MaterialTransaction?> OpenDialogMaterialTransactionAsync(MaterialTransactionObjectViewModel dialogViewModel)
