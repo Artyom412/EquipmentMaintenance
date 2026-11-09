@@ -16,12 +16,12 @@ namespace EquipmentMaintenance.ViewModels
         protected ListViewBase() 
         {
             AddCommand = new AsyncRelayCommand(AddExecute);
-            DeleteCommand = new RelayCommand(DeleteExecute);
-            RefreshCommand = new RelayCommand(RefreshExecute);
+            DeleteCommand = new AsyncRelayCommand(DeleteExecute);
+            RefreshCommand = new AsyncRelayCommand(RefreshExecute);
         }
 
         protected abstract Task AddExecute();
-        protected abstract void DeleteExecute();
-        protected abstract void RefreshExecute();
+        protected abstract Task DeleteExecute();
+        protected abstract Task RefreshExecute();
     }
 }

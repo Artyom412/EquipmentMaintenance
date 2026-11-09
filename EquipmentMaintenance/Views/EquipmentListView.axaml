@@ -17,7 +17,7 @@
             <Button Grid.Column="3" Content="Удалить" Command="{Binding DeleteCommand}" HorizontalAlignment="Right"/>
         </Grid>
 
-        <TableView ItemsSource="{Binding Items}" Grid.Row="1" CanUserResizeColumns="False">
+        <TableView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedEquipment}" Grid.Row="1" CanUserResizeColumns="False">
             <TableView.Columns>
                 <TableViewColumn Header="Номер" Binding="{Binding InventoryNumber}"/>
                 <TableViewColumn Header="Модель" Binding="{Binding Model}"/>

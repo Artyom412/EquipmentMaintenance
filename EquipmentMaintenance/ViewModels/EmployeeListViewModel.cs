@@ -12,6 +12,8 @@ namespace EquipmentMaintenance.ViewModels
         private readonly Func<EmployeeObjectViewModel> _employeeVmFactory = employeeVmFactory;
         private readonly ICrudService _crudService = crudService;
 
+        public Employee? SelectedEmployee { get; set; }
+
         public async Task LoadDataFromServer()
         {
             var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle, x => x.Subdivision);
@@ -23,7 +25,7 @@ namespace EquipmentMaintenance.ViewModels
         {
             var employeeViewModel = _employeeVmFactory();
 
-            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(employeeViewModel)).Response;
+            Employee? createdEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(employeeViewModel, null)).Response;
 
             if (createdEmployee is not null)
             {
@@ -34,14 +36,28 @@ namespace EquipmentMaintenance.ViewModels
             }
         }
 
-        protected override void DeleteExecute()
+        protected override async Task DeleteExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedEmployee is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedEmployee);
+            Items.Remove(SelectedEmployee);
+            SelectedEmployee = null;
         }
 
-        protected override void RefreshExecute()
+        protected override async Task RefreshExecute()
         {
-            throw new NotImplementedException();
+            var employeeViewModel = _employeeVmFactory();
+            Employee? updatedEmployee = await WeakReferenceMessenger.Default.Send(new EmployeeDialogMessage(employeeViewModel, SelectedEmployee)).Response;
+
+            if (updatedEmployee is not null)
+            {
+                updatedEmployee.JobTitle = null!;
+                updatedEmployee.Subdivision = null!;
+                await _crudService.UpdateRecordAsync(updatedEmployee);
+                Items.Clear();
+                await LoadDataFromServer();
+            }
         }
     }
 }

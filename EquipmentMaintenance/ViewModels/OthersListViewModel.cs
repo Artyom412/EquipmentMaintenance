@@ -19,6 +19,10 @@ namespace EquipmentMaintenance.ViewModels
         public AvaloniaList<Location> Locations { get; } = [];
         public AvaloniaList<UnitOfMeasurement> Measurements { get; } = [];
 
+        public JobTitle? SelectedJobTitle { get; set; }
+        public Location? SelectedLocation { get; set; }
+        public UnitOfMeasurement? SelectedMeasurement { get; set; }
+
         public async Task LoadDataFromServer()
         {
             var jobTitles = await _crudService.GetRecordsAsync<JobTitle>();
@@ -32,6 +36,35 @@ namespace EquipmentMaintenance.ViewModels
 
         private bool CanExecute() => !string.IsNullOrWhiteSpace(Name);
 
+        [RelayCommand]
+        private async Task RemoveJobTitle()
+        {
+            if (SelectedJobTitle is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedJobTitle);
+            JobTitles.Remove(SelectedJobTitle);
+            SelectedJobTitle = null;
+        }
+
+        [RelayCommand]
+        private async Task RemoveLocation()
+        {
+            if (SelectedLocation is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedLocation);
+            Locations.Remove(SelectedLocation);
+            SelectedLocation = null;
+        }
+
+        [RelayCommand]
+        private async Task RemoveMeasurement()
+        {
+            if (SelectedMeasurement is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedMeasurement);
+            Measurements.Remove(SelectedMeasurement);
+            SelectedMeasurement = null;
+        }
 
         [RelayCommand(CanExecute = nameof(CanExecute))]
         private async Task AddRecord(string parametr)

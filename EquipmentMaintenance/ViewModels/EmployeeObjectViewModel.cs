@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
@@ -24,7 +25,7 @@ namespace EquipmentMaintenance.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial Subdivision? SelectedSubdivision { get; set; }
 
-        public Employee? CreatedEmployee { get; private set; }
+        public Employee? CreatedEmployee { get; set; }
 
         public AvaloniaList<JobTitle> JobTitles { get; } = [];
         public AvaloniaList<Subdivision> Subdivisions { get; } = [];
@@ -41,6 +42,13 @@ namespace EquipmentMaintenance.ViewModels
 
             JobTitles.AddRange(jobTitles);
             Subdivisions.AddRange(subdivisions);
+
+            if (CreatedEmployee is not null)
+            {
+                Name = CreatedEmployee.Name;
+                SelectedJobTitle = JobTitles.Where(x => x.Id == CreatedEmployee.JobTitleId).First();
+                SelectedSubdivision = Subdivisions.Where(x => x.Id == CreatedEmployee.SubdivisionId).First();
+            }
         }
 
         protected override void CancelExecute()
@@ -51,15 +59,27 @@ namespace EquipmentMaintenance.ViewModels
 
         protected override void ConfirmExecute()
         {
-            var employee = new Employee
+            if (CreatedEmployee is not null)
             {
-                Name = Name!,
-                SubdivisionId = SelectedSubdivision!.Id,
-                JobTitleId = SelectedJobTitle!.Id,
-            };
+                CreatedEmployee.Name = Name!;
+                CreatedEmployee.JobTitleId = SelectedJobTitle!.Id;
+                CreatedEmployee.SubdivisionId = SelectedSubdivision!.Id;
 
-            CreatedEmployee = employee;
-            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+            else
+            {
+                var employee = new Employee
+                {
+                    Name = Name!,
+                    SubdivisionId = SelectedSubdivision!.Id,
+                    JobTitleId = SelectedJobTitle!.Id,
+                };
+
+                CreatedEmployee = employee;
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+
         }
     }
 }

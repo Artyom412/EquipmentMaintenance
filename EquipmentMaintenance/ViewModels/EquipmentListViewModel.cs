@@ -12,11 +12,13 @@ namespace EquipmentMaintenance.ViewModels
         private readonly Func<EquipmentObjectViewModel> _equipmentVmFactory = equipmentVmFactory;
         private readonly ICrudService _crudService = crudService;
 
+        public Equipment? SelectedEquipment { get; set; }
+
         protected override async Task AddExecute()
         {
             var employeeViewModel = _equipmentVmFactory();
 
-            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel)).Response;
+            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel, null)).Response;
 
             if (createdEquipment is not null)
             {
@@ -28,18 +30,33 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
-            var equipments = await _crudService.GetRecordsAsync<Equipment>();
+            var equipments = await _crudService.GetRecordsAsync<Equipment>(x => x.Location);
             Items.AddRange(equipments);
         }
 
-        protected override void DeleteExecute()
+        protected async override Task DeleteExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedEquipment is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedEquipment);
+            Items.Remove(SelectedEquipment);
+            SelectedEquipment = null;
         }
 
-        protected override void RefreshExecute()
+        protected async override Task RefreshExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedEquipment is null) return;
+
+            var employeeViewModel = _equipmentVmFactory();
+            Equipment? createdEquipment = await WeakReferenceMessenger.Default.Send(new EquipmentDialogMessage(employeeViewModel, SelectedEquipment)).Response;
+
+            if (createdEquipment is not null)
+            {
+                createdEquipment.Location = null!;
+                await _crudService.UpdateRecordAsync(createdEquipment);
+                Items.Clear();
+                await LoadDataFromServer();
+            }
         }
     }
 }

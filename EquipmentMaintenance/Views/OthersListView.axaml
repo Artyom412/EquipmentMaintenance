@@ -26,31 +26,47 @@
         </StackPanel>
 
         <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0 10">
-            <GroupBox Grid.Column="0" Header="Должности">
-                <TableView CanUserResizeColumns="False" ItemsSource="{Binding JobTitles}">
-                    <TableView.Columns>
-                        <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
-                    </TableView.Columns>
-                </TableView> 
-            </GroupBox>
+            <Grid Grid.Column="0" RowDefinitions="*, Auto">
+                <GroupBox Grid.Row="0" Header="Должности">
+                    <TableView CanUserResizeColumns="False" ItemsSource="{Binding JobTitles}" SelectedItem="{Binding SelectedJobTitle}">
+                        <TableView.Columns>
+                            <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
+                        </TableView.Columns>
+                    </TableView> 
+                </GroupBox>
+                <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
+                    <Button Content="Удалить" Command="{Binding RemoveJobTitleCommand}"/>
+                    <Button Content="Обновить"/>
+                </StackPanel>
+            </Grid>
 
-            <GroupBox Grid.Column="1" Header="Места размещения">
-                <TableView CanUserResizeColumns="False" ItemsSource="{Binding Locations}">
-                    <TableView.Columns>
-                        <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
-                    </TableView.Columns>
-                </TableView>
-            </GroupBox>
+            <Grid Grid.Column="1" RowDefinitions="*, Auto">
+                <GroupBox Grid.Row="0" Header="Места размещения">
+                    <TableView CanUserResizeColumns="False" ItemsSource="{Binding Locations}" SelectedItem="{Binding SelectedLocation}">
+                        <TableView.Columns>
+                            <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
+                        </TableView.Columns>
+                    </TableView>
+                </GroupBox>
+                <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
+                    <Button Content="Удалить" Command="{Binding RemoveLocationCommand}"/>
+                    <Button Content="Обновить"/>
+                </StackPanel>
+            </Grid>
 
-            <GroupBox Grid.Column="2" Header="Еденицы измерения">
-                <TableView CanUserResizeColumns="False" ItemsSource="{Binding Measurements}">
-                    <TableView.Columns>
-                        <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
-                    </TableView.Columns>
-                </TableView>
-            </GroupBox>
-
+            <Grid Grid.Column="2" RowDefinitions="*, Auto">
+                <GroupBox Grid.Row="0" Header="Еденицы измерения">
+                    <TableView CanUserResizeColumns="False" ItemsSource="{Binding Measurements}" SelectedItem="{Binding SelectedMeasurement}">
+                        <TableView.Columns>
+                            <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>
+                        </TableView.Columns>
+                    </TableView>
+                </GroupBox>
+                <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
+                    <Button Content="Удалить" Command="{Binding RemoveMeasurementCommand}"/>
+                    <Button Content="Обновить"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-
     </Grid>
 </UserControl>

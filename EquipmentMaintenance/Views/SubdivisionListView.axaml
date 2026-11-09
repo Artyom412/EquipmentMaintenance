@@ -17,7 +17,7 @@
             <Button Grid.Column="3" Content="Удалить" Command="{Binding DeleteCommand}" HorizontalAlignment="Right"/>
         </Grid>
 
-        <TableView Grid.Row="1" CanUserResizeColumns="False" ItemsSource="{Binding Items}">
+        <TableView Grid.Row="1" CanUserResizeColumns="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedSubdivision}">
             <TableView.Columns>
                 <TableViewColumn Header="Код" Binding="{Binding Code}"/>
                 <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>

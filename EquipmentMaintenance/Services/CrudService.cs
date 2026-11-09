@@ -34,5 +34,21 @@ namespace EquipmentMaintenance.Services
 
             return await collection.ToListAsync();
         }
+
+        public async Task RemoveRecordAsync<T>(T entity) where T : class
+        {
+            await using var context = await contextFactory.CreateDbContextAsync();
+
+            context.Set<T>().Remove(entity);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRecordAsync<T>(T entity) where T : class
+        {
+            await using var context = await contextFactory.CreateDbContextAsync();
+
+            context.Set<T>().Update(entity);
+            await context.SaveChangesAsync();
+        }
     }
 }

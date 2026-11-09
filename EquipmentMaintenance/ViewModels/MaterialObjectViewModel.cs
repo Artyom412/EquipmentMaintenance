@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
@@ -24,10 +25,10 @@ namespace EquipmentMaintenance.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial UnitOfMeasurement? SelectedMeasure { get; set; }
 
-        public AvaloniaList<UnitOfMeasurement> Measurements { get; set; } = [];
-
         [ObservableProperty]
         public partial int ConsumptionRate { get; set; }
+
+        public AvaloniaList<UnitOfMeasurement> Measurements { get; set; } = [];
 
         public Material? CreatedMaterial { get; set; }
 
@@ -40,6 +41,14 @@ namespace EquipmentMaintenance.ViewModels
         {
             var units = await _crudService.GetRecordsAsync<UnitOfMeasurement>();
             Measurements.AddRange(units);
+
+            if (CreatedMaterial is not null)
+            {
+                ItemNumber = CreatedMaterial.ItemNumber;
+                Name = CreatedMaterial.Name;
+                SelectedMeasure = Measurements.First(x => x.Id == CreatedMaterial.Id);
+                ConsumptionRate = CreatedMaterial.ConsumptionRate;
+            }
         }
 
         protected override void CancelExecute()
@@ -50,16 +59,28 @@ namespace EquipmentMaintenance.ViewModels
 
         protected override void ConfirmExecute()
         {
-            var material = new Material
+            if (CreatedMaterial is not null)
             {
-                ItemNumber = ItemNumber,
-                Name = Name,
-                UnitOfMeasurementId = SelectedMeasure!.Id,
-                ConsumptionRate = ConsumptionRate
-            };
+                CreatedMaterial.ItemNumber = ItemNumber;
+                CreatedMaterial.Name = Name;
+                CreatedMaterial.UnitOfMeasurementId = SelectedMeasure!.Id;
+                CreatedMaterial.ConsumptionRate = ConsumptionRate;
 
-            CreatedMaterial = material;
-            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+            else
+            {
+                var material = new Material
+                {
+                    ItemNumber = ItemNumber,
+                    Name = Name,
+                    UnitOfMeasurementId = SelectedMeasure!.Id,
+                    ConsumptionRate = ConsumptionRate
+                };
+
+                CreatedMaterial = material;
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
         }
     }
 }

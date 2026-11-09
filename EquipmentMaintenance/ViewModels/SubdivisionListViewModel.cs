@@ -12,6 +12,8 @@ namespace EquipmentMaintenance.ViewModels
         private readonly ICrudService _crudService = crudService;
         private readonly Func<SubdivisionObjectViewModel> _subdivisionVmFactory = subdivisionVmFactory;
 
+        public Subdivision? SelectedSubdivision { get; set; }
+
         public async Task LoadDataFromServer()
         {
             var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
@@ -31,12 +33,16 @@ namespace EquipmentMaintenance.ViewModels
             }
         }
 
-        protected override void DeleteExecute()
+        protected async override Task DeleteExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedSubdivision is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedSubdivision);
+            Items.Remove(SelectedSubdivision);
+            SelectedSubdivision = null;
         }
 
-        protected override void RefreshExecute()
+        protected async override Task RefreshExecute()
         {
             throw new NotImplementedException();
         }

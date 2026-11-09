@@ -12,6 +12,8 @@ namespace EquipmentMaintenance.ViewModels
         private readonly Func<MaterialTransactionObjectViewModel> _materialTransactionVmFactory = materialTransactionVmFactory;
         private readonly ICrudService _crudService = crudService;
 
+        public MaterialTransaction? SelectedMaterialTransaction { get; set; }
+
         protected override async Task AddExecute()
         {
             var viewModel = _materialTransactionVmFactory();
@@ -32,12 +34,16 @@ namespace EquipmentMaintenance.ViewModels
             Items.AddRange(materialTransactions);
         }
 
-        protected override void DeleteExecute()
+        protected async override Task DeleteExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedMaterialTransaction is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedMaterialTransaction);
+            Items.Remove(SelectedMaterialTransaction);
+            SelectedMaterialTransaction = null;
         }
 
-        protected override void RefreshExecute()
+        protected async override Task RefreshExecute()
         {
             throw new NotImplementedException();
         }

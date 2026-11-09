@@ -5,6 +5,7 @@ using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
@@ -41,12 +42,21 @@ namespace EquipmentMaintenance.ViewModels
             new EquipmentOption(EquipmentType.Other, "Прочее")
         ];
 
-        public Equipment? CreatedEquipment { get; private set; }
+        public Equipment? CreatedEquipment { get; set; }
 
         public async Task LoadDataFromServer()
         {
             var locations = await _crudService.GetRecordsAsync<Location>();
             Locations.AddRange(locations);
+
+            if (CreatedEquipment is not null)
+            {
+                Number = CreatedEquipment.InventoryNumber;
+                SelectedEquipmentType = EquipmentOptions.Where(x => x.ValueType == CreatedEquipment.EquipmentType).First();
+                Model = CreatedEquipment.Model;
+                SelectedLocation = Locations.Where(x => x.Id == CreatedEquipment.Location.Id).FirstOrDefault();
+                DateOfCommissioning = CreatedEquipment.DateOfCommissioning.ToDateTime(TimeOnly.MinValue, DateTimeKind.Local);
+            }
         }
 
         protected override bool CanExecute() =>
@@ -56,7 +66,6 @@ namespace EquipmentMaintenance.ViewModels
             && SelectedLocation is not null
             && DateOfCommissioning is not null;
 
-
         protected override void CancelExecute()
         {
             CreatedEquipment = null;
@@ -65,17 +74,30 @@ namespace EquipmentMaintenance.ViewModels
 
         protected override void ConfirmExecute()
         {
-            var equipment = new Equipment
+            if (CreatedEquipment is not null)
             {
-                InventoryNumber = Number,
-                EquipmentType = SelectedEquipmentType?.ValueType ?? Models.EquipmentType.Other,
-                Model = Model,
-                LocationId = SelectedLocation!.Id,
-                DateOfCommissioning = DateOnly.FromDateTime(DateOfCommissioning!.Value.Date),
-            };
+                CreatedEquipment.InventoryNumber = Number;
+                CreatedEquipment.EquipmentType = SelectedEquipmentType?.ValueType ?? Models.EquipmentType.Other;
+                CreatedEquipment.Model = Model;
+                CreatedEquipment.LocationId = SelectedLocation!.Id;
+                CreatedEquipment.DateOfCommissioning = DateOnly.FromDateTime(DateOfCommissioning!.Value.Date);
 
-            CreatedEquipment = equipment;
-            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+            else
+            {
+                var equipment = new Equipment
+                {
+                    InventoryNumber = Number,
+                    EquipmentType = SelectedEquipmentType?.ValueType ?? Models.EquipmentType.Other,
+                    Model = Model,
+                    LocationId = SelectedLocation!.Id,
+                    DateOfCommissioning = DateOnly.FromDateTime(DateOfCommissioning!.Value.Date),
+                };
+
+                CreatedEquipment = equipment;
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
         }
     }
 

@@ -9,5 +9,7 @@ namespace EquipmentMaintenance.Services
     {
         Task AddRecordAsync<T>(T entity) where T : class;
         Task<IEnumerable<T>> GetRecordsAsync<T>(params Expression<Func<T, object>>[] includes) where T : class;
+        Task RemoveRecordAsync<T>(T entity) where T : class;
+        Task UpdateRecordAsync<T>(T entity) where T : class;
     }
 }

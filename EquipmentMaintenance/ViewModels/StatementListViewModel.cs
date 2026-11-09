@@ -12,6 +12,8 @@ namespace EquipmentMaintenance.ViewModels
         private readonly ICrudService _crudService = crudService;
         private readonly Func<StatementObjectViewModel> _statementObjectVmFactory = statementObjectVmFactory;
 
+        public Statement? SelectedStatement { get; set; }
+
         public async Task LoadDataFromServer()
         {
             var statements = await _crudService.GetRecordsAsync<Statement>();
@@ -35,12 +37,16 @@ namespace EquipmentMaintenance.ViewModels
             }
         }
 
-        protected override void DeleteExecute()
+        protected async override Task DeleteExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedStatement is null) return;
+
+            await _crudService.RemoveRecordAsync(SelectedStatement);
+            Items.Remove(SelectedStatement);
+            SelectedStatement = null;
         }
 
-        protected override void RefreshExecute()
+        protected async override Task RefreshExecute()
         {
             throw new NotImplementedException();
         }
