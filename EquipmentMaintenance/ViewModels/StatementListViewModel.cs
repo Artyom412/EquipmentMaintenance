@@ -7,18 +7,24 @@ using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
 {
-    public partial class StatementListViewModel(ICrudService crudService, Func<StatementObjectViewModel> statementObjectVmFactory) : ListViewBase<Statement>
+    public partial class StatementListViewModel(
+        ICrudService crudService,
+        IStatementService statementService,
+        Func<StatementObjectViewModel> statementObjectVmFactory) : ListViewBase<Statement>
     {
         private readonly ICrudService _crudService = crudService;
+        private readonly IStatementService _statementService = statementService;
         private readonly Func<StatementObjectViewModel> _statementObjectVmFactory = statementObjectVmFactory;
 
         public Statement? SelectedStatement { get; set; }
 
         public async Task LoadDataFromServer()
         {
-            Items.Clear();
-            var statements = await _crudService.GetRecordsAsync<Statement>();
-            Items.AddRange(statements);
+            await RunSafelyAsync(async () =>
+            {
+                var statements = await _crudService.GetRecordsAsync<Statement>();
+                SetItems(statements);
+            });
         }
 
         protected async override Task AddExecute()
@@ -29,50 +35,43 @@ namespace EquipmentMaintenance.ViewModels
 
             if (statement is not null)
             {
-                await _crudService.AddRecordAsync(statement);
+                await _statementService.SaveAsync(statement);
                 statement.Subdivision = viewModel.SelectedSubdivision!;
                 statement.Equipment = viewModel.SelectedEquipment!;
                 statement.Employee = viewModel.SelectedEmployee!;
                 statement.Material = viewModel.SelectedMaterial!;
-                Items.Add(statement);
-
-                CreateMaterialTransaction(statement);
+                AddItem(statement);
             }
-        }
-
-        private void CreateMaterialTransaction(Statement statement)
-        {
-            var maaterialTransaction = new MaterialTransaction
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now),
-                MaterialId = statement.MaterialId,
-                Quantity = statement.Quantity,
-                TransactionType = TransactionType.Expense
-            };
-
-            _crudService.AddRecordAsync(maaterialTransaction);
         }
 
         protected async override Task DeleteExecute()
         {
             if (SelectedStatement is null) return;
 
-            await _crudService.RemoveRecordAsync(SelectedStatement);
-            Items.Remove(SelectedStatement);
+            await _statementService.DeleteAsync(SelectedStatement);
+            RemoveItem(SelectedStatement);
             SelectedStatement = null;
         }
 
         protected async override Task RefreshExecute()
         {
+            if (SelectedStatement is null) return;
+
             var viewModel = _statementObjectVmFactory();
 
             Statement? updatedStatement = await WeakReferenceMessenger.Default.Send(new StatementDialogMessage(viewModel, SelectedStatement)).Response;
 
             if (updatedStatement is not null)
             {
-                await _crudService.UpdateRecordAsync(updatedStatement);
+                await _statementService.SaveAsync(updatedStatement);
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(Statement statement, string searchText) =>
+            statement.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || statement.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+            || statement.Result?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+            || statement.PriorityDescription.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 }

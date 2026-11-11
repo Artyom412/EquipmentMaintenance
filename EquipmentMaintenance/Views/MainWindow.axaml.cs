@@ -72,6 +72,7 @@ public partial class MainWindow : Window
                 EmployeeId = statement.EmployeeId,
                 CompletionDate = statement.CompletionDate,
                 MaterialId = statement.MaterialId,
+                Quantity = statement.Quantity,
                 Result = statement.Result,
             };
 

@@ -24,14 +24,17 @@ namespace EquipmentMaintenance.ViewModels
             {
                 await _crudService.AddRecordAsync(createdEquipment);
                 createdEquipment.Location = employeeViewModel.SelectedLocation!;
-                Items.Add(createdEquipment);
+                AddItem(createdEquipment);
             }
         }
 
         public async Task LoadDataFromServer()
         {
-            var equipments = await _crudService.GetRecordsAsync<Equipment>(x => x.Location);
-            Items.AddRange(equipments);
+            await RunSafelyAsync(async () =>
+            {
+                var equipments = await _crudService.GetRecordsAsync<Equipment>(x => x.Location);
+                SetItems(equipments);
+            });
         }
 
         protected async override Task DeleteExecute()
@@ -39,7 +42,7 @@ namespace EquipmentMaintenance.ViewModels
             if (SelectedEquipment is null) return;
 
             await _crudService.RemoveRecordAsync(SelectedEquipment);
-            Items.Remove(SelectedEquipment);
+            RemoveItem(SelectedEquipment);
             SelectedEquipment = null;
         }
 
@@ -58,5 +61,11 @@ namespace EquipmentMaintenance.ViewModels
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(Equipment equipment, string searchText) =>
+            equipment.InventoryNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || equipment.Model.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || equipment.Location?.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+            || equipment.EquipmentType.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -16,9 +16,11 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
-            var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle, x => x.Subdivision);
-
-            Items.AddRange(employees);
+            await RunSafelyAsync(async () =>
+            {
+                var employees = await _crudService.GetRecordsAsync<Employee>(x => x.JobTitle, x => x.Subdivision);
+                SetItems(employees);
+            });
         }
 
         protected override async Task AddExecute()
@@ -32,7 +34,7 @@ namespace EquipmentMaintenance.ViewModels
                 await _crudService.AddRecordAsync(createdEmployee);
                 createdEmployee.JobTitle = employeeViewModel.SelectedJobTitle!;
                 createdEmployee.Subdivision = employeeViewModel.SelectedSubdivision!;
-                Items.Add(createdEmployee);
+                AddItem(createdEmployee);
             }
         }
 
@@ -41,7 +43,7 @@ namespace EquipmentMaintenance.ViewModels
             if (SelectedEmployee is null) return;
 
             await _crudService.RemoveRecordAsync(SelectedEmployee);
-            Items.Remove(SelectedEmployee);
+            RemoveItem(SelectedEmployee);
             SelectedEmployee = null;
         }
 
@@ -59,5 +61,10 @@ namespace EquipmentMaintenance.ViewModels
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(Employee employee, string searchText) =>
+            employee.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || employee.JobTitle?.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+            || employee.Subdivision?.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true;
     }
 }

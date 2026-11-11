@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.Services
@@ -12,6 +13,11 @@ namespace EquipmentMaintenance.Services
         public async Task AddRecordAsync<T>(T entity) where T : class
         {
             await using var context = await contextFactory.CreateDbContextAsync(); 
+
+            if (entity is MaterialTransaction materialTransaction)
+            {
+                await ValidateMaterialTransactionAsync(context, materialTransaction);
+            }
 
             await context.Set<T>().AddAsync(entity);
             await context.SaveChangesAsync();
@@ -47,8 +53,45 @@ namespace EquipmentMaintenance.Services
         {
             await using var context = await contextFactory.CreateDbContextAsync();
 
+            if (entity is MaterialTransaction materialTransaction)
+            {
+                await ValidateMaterialTransactionAsync(context, materialTransaction);
+            }
+
             context.Set<T>().Update(entity);
             await context.SaveChangesAsync();
+        }
+
+        private static async Task ValidateMaterialTransactionAsync(
+            AppDbContext context,
+            MaterialTransaction transaction)
+        {
+            if (transaction.Quantity <= 0)
+            {
+                throw new InvalidOperationException("Количество материала должно быть больше нуля.");
+            }
+
+            if (transaction.TransactionType != TransactionType.Expense)
+            {
+                return;
+            }
+
+            var transactions = context.MaterialTransactions
+                .Where(x => x.MaterialId == transaction.MaterialId && x.Id != transaction.Id);
+            var income = await transactions
+                .Where(x => x.TransactionType == TransactionType.Income)
+                .Select(x => (long?)x.Quantity)
+                .SumAsync() ?? 0;
+            var expense = await transactions
+                .Where(x => x.TransactionType == TransactionType.Expense)
+                .Select(x => (long?)x.Quantity)
+                .SumAsync() ?? 0;
+
+            if (income - expense < transaction.Quantity)
+            {
+                throw new InvalidOperationException(
+                    $"Недостаточно материала на складе. Доступно: {income - expense}, требуется: {transaction.Quantity}.");
+            }
         }
     }
 }

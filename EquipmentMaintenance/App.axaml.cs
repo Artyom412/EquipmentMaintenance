@@ -57,6 +57,7 @@ public partial class App : Application
     {
         services.AddTransient<INavigationService, NavigationService>();
         services.AddTransient<ICrudService, CrudService>();
+        services.AddTransient<IStatementService, StatementService>();
     }
 
     private static void BuildViewModels(IServiceCollection services)

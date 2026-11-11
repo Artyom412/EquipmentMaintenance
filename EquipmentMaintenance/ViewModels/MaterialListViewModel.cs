@@ -16,8 +16,11 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
-            var materials = await _crudService.GetRecordsAsync<Material>(x => x.UnitOfMeasurement);
-            Items.AddRange(materials);
+            await RunSafelyAsync(async () =>
+            {
+                var materials = await _crudService.GetRecordsAsync<Material>(x => x.UnitOfMeasurement);
+                SetItems(materials);
+            });
         }
 
         protected override async Task AddExecute()
@@ -30,7 +33,7 @@ namespace EquipmentMaintenance.ViewModels
             {
                 await _crudService.AddRecordAsync(createdMaterial);
                 createdMaterial.UnitOfMeasurement = materialViewModel.SelectedMeasure!;   
-                Items.Add(createdMaterial);
+                AddItem(createdMaterial);
             }
         }
 
@@ -39,7 +42,7 @@ namespace EquipmentMaintenance.ViewModels
             if (SelectedMaterial is null) return;
 
             await _crudService.RemoveRecordAsync(SelectedMaterial);
-            Items.Remove(SelectedMaterial);
+            RemoveItem(SelectedMaterial);
             SelectedMaterial = null;
         }
 
@@ -56,5 +59,10 @@ namespace EquipmentMaintenance.ViewModels
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(Material material, string searchText) =>
+            material.ItemNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || material.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || material.UnitOfMeasurement?.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true;
     }
 }

@@ -40,6 +40,7 @@ namespace EquipmentMaintenance.ViewModels
         public async Task LoadDataFromServer()
         {
             var units = await _crudService.GetRecordsAsync<UnitOfMeasurement>();
+            Measurements.Clear();
             Measurements.AddRange(units);
 
             if (CreatedMaterial is not null)

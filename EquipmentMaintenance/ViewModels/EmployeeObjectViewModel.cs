@@ -40,6 +40,8 @@ namespace EquipmentMaintenance.ViewModels
             var jobTitles = await _crudService.GetRecordsAsync<JobTitle>();
             var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
 
+            JobTitles.Clear();
+            Subdivisions.Clear();
             JobTitles.AddRange(jobTitles);
             Subdivisions.AddRange(subdivisions);
 

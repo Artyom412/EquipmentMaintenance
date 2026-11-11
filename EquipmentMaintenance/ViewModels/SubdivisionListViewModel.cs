@@ -16,9 +16,11 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
-            var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
-            Items.Clear();
-            Items.AddRange(subdivisions);
+            await RunSafelyAsync(async () =>
+            {
+                var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
+                SetItems(subdivisions);
+            });
         }
 
         protected async override Task AddExecute()
@@ -30,7 +32,7 @@ namespace EquipmentMaintenance.ViewModels
             if (createdSubdivision is not null)
             {
                 await _crudService.AddRecordAsync(createdSubdivision);
-                Items.Add(createdSubdivision);
+                AddItem(createdSubdivision);
             }
         }
 
@@ -39,7 +41,7 @@ namespace EquipmentMaintenance.ViewModels
             if (SelectedSubdivision is null) return;
 
             await _crudService.RemoveRecordAsync(SelectedSubdivision);
-            Items.Remove(SelectedSubdivision);
+            RemoveItem(SelectedSubdivision);
             SelectedSubdivision = null;
         }
 
@@ -57,5 +59,8 @@ namespace EquipmentMaintenance.ViewModels
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(Subdivision subdivision, string searchText) =>
+            subdivision.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 }

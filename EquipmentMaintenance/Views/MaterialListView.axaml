@@ -13,18 +13,19 @@
         <vm:MaterialListViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto, Auto *, Auto" RowSpacing="5" Margin="5">
+    <Grid RowDefinitions="Auto, Auto, *" RowSpacing="5" Margin="5">
         <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *" ColumnSpacing="5">
             <Button Grid.Column="0" Content="Добавить" Command="{Binding AddCommand}"/>
             <Button Grid.Column="1" Content="Обновить" Command="{Binding RefreshCommand}"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="70 0">
-                <TextBox PlaceholderText="Контроллер питания" MinWidth="250" Margin="0 0 5 0"/>
-                <Button Content="Поиск"/>
+                <TextBox Text="{Binding SearchText}" PlaceholderText="Контроллер питания" MinWidth="250" Margin="0 0 5 0"/>
+                <Button Content="Поиск" Command="{Binding SearchCommand}"/>
             </StackPanel>
             <Button Grid.Column="3" Content="Удалить" Command="{Binding DeleteCommand}" HorizontalAlignment="Right"/>
         </Grid>
 
-        <TableView Grid.Row="1" CanUserResizeColumns="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedMaterial}">
+        <TextBlock Grid.Row="1" Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap"/>
+        <TableView Grid.Row="2" CanUserResizeColumns="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedMaterial}">
             <TableView.Columns>
                 <TableViewColumn Header="Инвертарный номер" Binding="{Binding ItemNumber}"/>
                 <TableViewColumn Header="Наименование" Binding="{Binding Name}"/>

@@ -47,6 +47,7 @@ namespace EquipmentMaintenance.ViewModels
         public async Task LoadDataFromServer()
         {
             var locations = await _crudService.GetRecordsAsync<Location>();
+            Locations.Clear();
             Locations.AddRange(locations);
 
             if (CreatedEquipment is not null)

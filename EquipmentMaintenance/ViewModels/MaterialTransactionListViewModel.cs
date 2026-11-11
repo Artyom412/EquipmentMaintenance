@@ -24,17 +24,18 @@ namespace EquipmentMaintenance.ViewModels
             if (materialTransaction is not null)
             {
                 await _crudService.AddRecordAsync(materialTransaction);
-                Items.Add(materialTransaction);
+                AddItem(materialTransaction);
                 materialTransaction.Material = viewModel.SelectedMaterial!;
             }
         }
 
         public async Task LoadDataFromServer()
         {
-            Items.Clear();
-
-            var materialTransactions = await _crudService.GetRecordsAsync<MaterialTransaction>(x => x.Material);
-            Items.AddRange(materialTransactions);
+            await RunSafelyAsync(async () =>
+            {
+                var materialTransactions = await _crudService.GetRecordsAsync<MaterialTransaction>(x => x.Material);
+                SetItems(materialTransactions);
+            });
         }
 
         protected async override Task DeleteExecute()
@@ -42,7 +43,7 @@ namespace EquipmentMaintenance.ViewModels
             if (SelectedMaterialTransaction is null) return;
 
             await _crudService.RemoveRecordAsync(SelectedMaterialTransaction);
-            Items.Remove(SelectedMaterialTransaction);
+            RemoveItem(SelectedMaterialTransaction);
             SelectedMaterialTransaction = null;
         }
 
@@ -58,5 +59,10 @@ namespace EquipmentMaintenance.ViewModels
                 await LoadDataFromServer();
             }
         }
+
+        protected override bool MatchesSearch(MaterialTransaction transaction, string searchText) =>
+            transaction.Material?.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+            || transaction.TypeDescription.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+            || transaction.Date.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 }

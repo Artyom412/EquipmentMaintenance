@@ -83,6 +83,13 @@ namespace EquipmentMaintenance.ViewModels
             Employees.AddRange(employees);
 
             var materials = await _crudService.GetRecordsAsync<Material>();
+            Subdivisions.Clear();
+            Equipments.Clear();
+            Employees.Clear();
+            Materials.Clear();
+            Subdivisions.AddRange(subdivisions);
+            Equipments.AddRange(equipment);
+            Employees.AddRange(employees);
             Materials.AddRange(materials);
 
             if (CreatedStatement is not null)
@@ -109,7 +116,8 @@ namespace EquipmentMaintenance.ViewModels
             && SelectedEquipment is not null
             && SelectedEmployee is not null
             && CompletionDate is not null
-            && Quantity is not null;
+            && Quantity is > 0
+            && SelectedPriority is not null;
 
         protected override void CancelExecute()
         {

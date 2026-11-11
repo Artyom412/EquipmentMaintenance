@@ -27,6 +27,7 @@ namespace EquipmentMaintenance.ViewModels
         public partial TransationOption? SelectedType { get; set; }
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial int Quantity { get; set; }
 
         public MaterialTransaction? CreatedMaterialTransaction { get; set; }
@@ -42,11 +43,13 @@ namespace EquipmentMaintenance.ViewModels
         protected override bool CanExecute() => 
             Date is not null
             && SelectedMaterial is not null
-            && SelectedType is not null;
+            && SelectedType is not null
+            && Quantity > 0;
 
         public async Task LoadDataFromServer()
         {
             var materials = await _crudService.GetRecordsAsync<Material>();
+            Materials.Clear();
             Materials.AddRange(materials);
 
             if (CreatedMaterialTransaction is not null)
