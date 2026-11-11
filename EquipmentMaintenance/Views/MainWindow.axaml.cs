@@ -7,6 +7,7 @@ using EquipmentMaintenance.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tmds.DBus.Protocol;
 
 namespace EquipmentMaintenance.Views;
 
@@ -28,7 +29,7 @@ public partial class MainWindow : Window
 
         WeakReferenceMessenger.Default.Register<MainWindow, SubdivisionDialogMessage>(this, (recipient, message) =>
         {
-            message.Reply(recipient.OpenDialogSubdivisionAsync(message.ViewModel));
+            message.Reply(recipient.OpenDialogSubdivisionAsync(message.ViewModel, message.Subdivision));
         });
 
         WeakReferenceMessenger.Default.Register<MainWindow, MaterialDialogMessage>(this, (recipient, message) =>
@@ -38,16 +39,16 @@ public partial class MainWindow : Window
 
         WeakReferenceMessenger.Default.Register<MainWindow, MaterialTransactionDialogMessage>(this, (recipient, message) =>
         {
-            message.Reply(recipient.OpenDialogMaterialTransactionAsync(message.ViewModel));
+            message.Reply(recipient.OpenDialogMaterialTransactionAsync(message.ViewModel, message.MaterialTransaction));
         });
 
         WeakReferenceMessenger.Default.Register<MainWindow, StatementDialogMessage>(this, (recipient, message) =>
         {
-            message.Reply(recipient.OpenDialogStatementAsync(message.ViewModel));
+            message.Reply(recipient.OpenDialogStatementAsync(message.ViewModel, message.Statement));
         });
     }
 
-    private async Task<Statement?> OpenDialogStatementAsync(StatementObjectViewModel dialogViewModel)
+    private async Task<Statement?> OpenDialogStatementAsync(StatementObjectViewModel dialogViewModel, Statement? statement)
     {
         var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
         var view = viewLocator?.Build(dialogViewModel);
@@ -55,6 +56,26 @@ public partial class MainWindow : Window
         if (view is not Window dialogWindow)
         {
             return null;
+        }
+
+        if (statement is not null)
+        {
+            var statementCopy = new Statement
+            {
+                Id = statement.Id,
+                Name = statement.Name,
+                Arrival = statement.Arrival,
+                SubdivisionId = statement.SubdivisionId,
+                EquipmentId = statement.EquipmentId,
+                Description = statement.Description,
+                Priority = statement.Priority,
+                EmployeeId = statement.EmployeeId,
+                CompletionDate = statement.CompletionDate,
+                MaterialId = statement.MaterialId,
+                Result = statement.Result,
+            };
+
+            dialogViewModel.CreatedStatement = statementCopy;
         }
 
         dialogWindow.DataContext = dialogViewModel;
@@ -65,7 +86,7 @@ public partial class MainWindow : Window
         return dialogViewModel.CreatedStatement;
     }
 
-    private async Task<MaterialTransaction?> OpenDialogMaterialTransactionAsync(MaterialTransactionObjectViewModel dialogViewModel)
+    private async Task<MaterialTransaction?> OpenDialogMaterialTransactionAsync(MaterialTransactionObjectViewModel dialogViewModel, MaterialTransaction? materialTransaction)
     {
         var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
         var view = viewLocator?.Build(dialogViewModel);
@@ -73,6 +94,20 @@ public partial class MainWindow : Window
         if (view is not Window dialogWindow)
         {
             return null;
+        }
+
+        if (materialTransaction is not null)
+        {
+            var materialTransactionCopy = new MaterialTransaction
+            {
+                Id = materialTransaction.Id,
+                Date = materialTransaction.Date,
+                MaterialId = materialTransaction.MaterialId,
+                TransactionType = materialTransaction.TransactionType,
+                Quantity = materialTransaction.Quantity,
+            };
+
+            dialogViewModel.CreatedMaterialTransaction = materialTransactionCopy;
         }
 
         dialogWindow.DataContext = dialogViewModel;
@@ -179,7 +214,7 @@ public partial class MainWindow : Window
         return dialogViewModel.CreatedEmployee;
     }
 
-    private async Task<Subdivision?> OpenDialogSubdivisionAsync(SubdivisionObjectViewModel dialogViewModel)
+    private async Task<Subdivision?> OpenDialogSubdivisionAsync(SubdivisionObjectViewModel dialogViewModel, Subdivision? subdivision)
     {
         var viewLocator = Application.Current?.DataTemplates.OfType<ViewLocator>().FirstOrDefault();
         var view = viewLocator?.Build(dialogViewModel);
@@ -189,6 +224,18 @@ public partial class MainWindow : Window
             return null;
         }
 
+        if (subdivision is not null)
+        {
+            var subdivisionCopy = new Subdivision
+            {
+                Id = subdivision.Id,
+                Name = subdivision.Name,
+                Code = subdivision.Code,
+            };
+
+            dialogViewModel.CreatedSubdivision = subdivisionCopy;
+        }
+
         dialogWindow.DataContext = dialogViewModel;
         dialogWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
@@ -196,5 +243,4 @@ public partial class MainWindow : Window
 
         return dialogViewModel.CreatedSubdivision;
     }
-
 }

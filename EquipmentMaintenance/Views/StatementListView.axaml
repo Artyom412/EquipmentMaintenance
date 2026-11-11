@@ -19,9 +19,8 @@
             </StackPanel>
             <Button Grid.Column="3" Content="Удалить" Command="{Binding DeleteCommand}" HorizontalAlignment="Right"/>
         </Grid>
-
             <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch">
-                <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedStatement}">
+                <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedStatement}" HorizontalAlignment="Stretch">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal"/>
@@ -29,9 +28,9 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Statement }">
-                            <Border Width="200" Height="250" Margin="10" Padding="10" Background="#FDFDFD" BorderThickness="5"
+                            <Border Width="200" Height="129" Margin="10" Padding="10" Background="#FDFDFD" BorderThickness="5"
                                     CornerRadius="8" BoxShadow="0 4 10 0 #20000000">
-                                <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="5">
+                                <Grid RowDefinitions="Auto, Auto" RowSpacing="5">
                                     <!-- Заголовок карточки -->
                                     <TextBlock Grid.Row="0" 
                                                Text="{Binding Name}"/>
@@ -39,12 +38,6 @@
                                     <TextBlock Grid.Row="1" 
                                                Text="{Binding CompletionDate}" 
                                                Margin="0,10,0,0"/>
-                    
-                                    <!-- Действие/Нижняя часть -->
-                                    <Button Grid.Row="2" 
-                                            Content="Открыть" 
-                                            HorizontalAlignment="Stretch" 
-                                            HorizontalContentAlignment="Center"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>

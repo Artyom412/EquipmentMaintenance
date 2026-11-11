@@ -46,7 +46,7 @@ namespace EquipmentMaintenance.ViewModels
             {
                 ItemNumber = CreatedMaterial.ItemNumber;
                 Name = CreatedMaterial.Name;
-                SelectedMeasure = Measurements.First(x => x.Id == CreatedMaterial.Id);
+                SelectedMeasure = Measurements.First(x => x.Id == CreatedMaterial.UnitOfMeasurementId);
                 ConsumptionRate = CreatedMaterial.ConsumptionRate;
             }
         }

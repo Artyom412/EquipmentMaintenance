@@ -54,7 +54,7 @@ namespace EquipmentMaintenance.ViewModels
                 Number = CreatedEquipment.InventoryNumber;
                 SelectedEquipmentType = EquipmentOptions.Where(x => x.ValueType == CreatedEquipment.EquipmentType).First();
                 Model = CreatedEquipment.Model;
-                SelectedLocation = Locations.Where(x => x.Id == CreatedEquipment.Location.Id).FirstOrDefault();
+                SelectedLocation = Locations.First(x => x.Id == CreatedEquipment.LocationId);
                 DateOfCommissioning = CreatedEquipment.DateOfCommissioning.ToDateTime(TimeOnly.MinValue, DateTimeKind.Local);
             }
         }

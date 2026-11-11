@@ -26,6 +26,8 @@ namespace EquipmentMaintenance.Models
         public Guid MaterialId { get; set; }
         public Material Material { get; set; } = null!;
 
+        public int Quantity { get; set; }
+
         public string? Result { get; set; }
 
         public string PriorityDescription => Priority switch
@@ -34,6 +36,5 @@ namespace EquipmentMaintenance.Models
             Priority.Low => "Низкий",
             _ => throw new NotImplementedException()
         };
-
     }
 }

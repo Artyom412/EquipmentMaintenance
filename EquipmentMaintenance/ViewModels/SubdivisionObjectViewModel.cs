@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
+using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
 {
@@ -15,7 +16,16 @@ namespace EquipmentMaintenance.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ConfirmExecuteCommand))]
         public partial string Name { get; set; } = string.Empty;
 
-        public Subdivision? CreatedSubdivision { get; private set; }
+        public Subdivision? CreatedSubdivision { get; set; }
+
+        public async Task LoadDataFromServer()
+        {
+            if (CreatedSubdivision is not null)
+            {
+                Name = CreatedSubdivision.Name;
+                Code = CreatedSubdivision.Code;
+            }
+        }
 
         protected override bool CanExecute() =>
             !string.IsNullOrWhiteSpace(Code)
@@ -28,14 +38,24 @@ namespace EquipmentMaintenance.ViewModels
 
         protected override void ConfirmExecute()
         {
-            var subdivision = new Subdivision
+            if (CreatedSubdivision is not null)
             {
-                Code = Code,
-                Name = Name
-            };
+                CreatedSubdivision.Name = Name;
+                CreatedSubdivision.Code = Code;
 
-            CreatedSubdivision = subdivision;
-            WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+            else
+            {
+                var subdivision = new Subdivision
+                {
+                    Code = Code,
+                    Name = Name
+                };
+
+                CreatedSubdivision = subdivision;
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
         }
     }
 }

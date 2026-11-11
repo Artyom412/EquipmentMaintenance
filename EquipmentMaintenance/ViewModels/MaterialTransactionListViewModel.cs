@@ -3,6 +3,7 @@ using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
@@ -18,7 +19,7 @@ namespace EquipmentMaintenance.ViewModels
         {
             var viewModel = _materialTransactionVmFactory();
 
-            MaterialTransaction? materialTransaction = await WeakReferenceMessenger.Default.Send(new MaterialTransactionDialogMessage(viewModel)).Response;
+            MaterialTransaction? materialTransaction = await WeakReferenceMessenger.Default.Send(new MaterialTransactionDialogMessage(viewModel, null)).Response;
 
             if (materialTransaction is not null)
             {
@@ -30,6 +31,8 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
+            Items.Clear();
+
             var materialTransactions = await _crudService.GetRecordsAsync<MaterialTransaction>(x => x.Material);
             Items.AddRange(materialTransactions);
         }
@@ -45,7 +48,15 @@ namespace EquipmentMaintenance.ViewModels
 
         protected async override Task RefreshExecute()
         {
-            throw new NotImplementedException();
+            var viewModel = _materialTransactionVmFactory();
+
+            MaterialTransaction? updatedMaterialTransaction = await WeakReferenceMessenger.Default.Send(new MaterialTransactionDialogMessage(viewModel, SelectedMaterialTransaction)).Response;
+
+            if (updatedMaterialTransaction is not null)
+            {
+                await _crudService.UpdateRecordAsync(updatedMaterialTransaction);
+                await LoadDataFromServer();
+            }
         }
     }
 }

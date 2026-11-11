@@ -36,7 +36,7 @@
                 </GroupBox>
                 <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
                     <Button Content="Удалить" Command="{Binding RemoveJobTitleCommand}"/>
-                    <Button Content="Обновить"/>
+                    <Button Content="Обновить" Command="{Binding UpdateJobTitleCommand}"/>
                 </StackPanel>
             </Grid>
 
@@ -50,7 +50,7 @@
                 </GroupBox>
                 <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
                     <Button Content="Удалить" Command="{Binding RemoveLocationCommand}"/>
-                    <Button Content="Обновить"/>
+                    <Button Content="Обновить" Command="{Binding UpdateLocationCommand}"/>
                 </StackPanel>
             </Grid>
 
@@ -64,7 +64,7 @@
                 </GroupBox>
                 <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal" Spacing="10">
                     <Button Content="Удалить" Command="{Binding RemoveMeasurementCommand}"/>
-                    <Button Content="Обновить"/>
+                    <Button Content="Обновить" Command="{Binding UpdateMeasurementsCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>

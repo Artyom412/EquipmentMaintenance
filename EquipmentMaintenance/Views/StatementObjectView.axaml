@@ -3,12 +3,12 @@
         xmlns:vm="using:EquipmentMaintenance.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="473"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="511"
         x:Class="EquipmentMaintenance.Views.StatementObjectView"
         x:DataType="vm:StatementObjectViewModel"
         Title="StatementObjectView"
-        Width="450" Height="473">
-    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
+        Width="450" Height="511">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Наименование" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" PlaceholderText="Например К001" MinWidth="290"/>
@@ -39,15 +39,19 @@
         <ComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{Binding Materials}" 
                   SelectedItem="{Binding SelectedMaterial}" 
                   DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="Ответственный" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <ComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{Binding Employees}" 
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Расход" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <NumericUpDown Grid.Row="8" Grid.Column="1" Minimum="1" Maximum="2000000" Increment="1" Value="{Binding Quantity}"/>
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Text="Ответственный" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="9" Grid.Column="1" ItemsSource="{Binding Employees}" 
                   SelectedItem="{Binding SelectedEmployee}" 
                   DisplayMemberBinding="{Binding Name}" PlaceholderText="Выбирите из списка" MinWidth="290"/>
-        <TextBlock Grid.Row="9" Grid.Column="0" Text="Результат" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Result}" MinWidth="290"/>
+        <TextBlock Grid.Row="10" Grid.Column="0" Text="Результат" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Result}" MinWidth="290"/>
 
-        <Button Grid.Row="10" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
-        <Button Grid.Row="10" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}" HorizontalAlignment="Right"/>
+        <Button Grid.Row="11" Grid.Column="0" Content="Отменить" Command="{Binding CancelExecuteCommand}"/>
+        <Button Grid.Row="11" Grid.Column="1" Content="Записать" Command="{Binding ConfirmExecuteCommand}" HorizontalAlignment="Right"/>
 
     </Grid>
 </Window>

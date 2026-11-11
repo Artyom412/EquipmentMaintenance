@@ -16,6 +16,7 @@ namespace EquipmentMaintenance.ViewModels
 
         public async Task LoadDataFromServer()
         {
+            Items.Clear();
             var statements = await _crudService.GetRecordsAsync<Statement>();
             Items.AddRange(statements);
         }
@@ -24,7 +25,7 @@ namespace EquipmentMaintenance.ViewModels
         {
             var viewModel = _statementObjectVmFactory();
 
-            Statement? statement = await WeakReferenceMessenger.Default.Send(new StatementDialogMessage(viewModel)).Response;
+            Statement? statement = await WeakReferenceMessenger.Default.Send(new StatementDialogMessage(viewModel, null)).Response;
 
             if (statement is not null)
             {
@@ -34,7 +35,22 @@ namespace EquipmentMaintenance.ViewModels
                 statement.Employee = viewModel.SelectedEmployee!;
                 statement.Material = viewModel.SelectedMaterial!;
                 Items.Add(statement);
+
+                CreateMaterialTransaction(statement);
             }
+        }
+
+        private void CreateMaterialTransaction(Statement statement)
+        {
+            var maaterialTransaction = new MaterialTransaction
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                MaterialId = statement.MaterialId,
+                Quantity = statement.Quantity,
+                TransactionType = TransactionType.Expense
+            };
+
+            _crudService.AddRecordAsync(maaterialTransaction);
         }
 
         protected async override Task DeleteExecute()
@@ -48,7 +64,15 @@ namespace EquipmentMaintenance.ViewModels
 
         protected async override Task RefreshExecute()
         {
-            throw new NotImplementedException();
+            var viewModel = _statementObjectVmFactory();
+
+            Statement? updatedStatement = await WeakReferenceMessenger.Default.Send(new StatementDialogMessage(viewModel, SelectedStatement)).Response;
+
+            if (updatedStatement is not null)
+            {
+                await _crudService.UpdateRecordAsync(updatedStatement);
+                await LoadDataFromServer();
+            }
         }
     }
 }

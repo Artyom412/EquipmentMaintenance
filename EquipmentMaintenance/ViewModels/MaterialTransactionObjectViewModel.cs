@@ -5,6 +5,7 @@ using EquipmentMaintenance.Messages;
 using EquipmentMaintenance.Models;
 using EquipmentMaintenance.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EquipmentMaintenance.ViewModels
@@ -28,7 +29,7 @@ namespace EquipmentMaintenance.ViewModels
         [ObservableProperty]
         public partial int Quantity { get; set; }
 
-        public MaterialTransaction? CreatedMaterialTransaction { get; private set; }
+        public MaterialTransaction? CreatedMaterialTransaction { get; set; }
 
         public AvaloniaList<Material> Materials { get; set; } = [];
 
@@ -47,24 +48,45 @@ namespace EquipmentMaintenance.ViewModels
         {
             var materials = await _crudService.GetRecordsAsync<Material>();
             Materials.AddRange(materials);
+
+            if (CreatedMaterialTransaction is not null)
+            {
+                Date = CreatedMaterialTransaction.Date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Local);
+                Quantity = CreatedMaterialTransaction.Quantity;
+                SelectedMaterial = Materials.First(x => x.Id == CreatedMaterialTransaction.MaterialId);
+                SelectedType = TransationOptions.First(x => x.ValueType == CreatedMaterialTransaction.TransactionType);
+            }
         }
 
         protected override void CancelExecute()
         {
+            CreatedMaterialTransaction = null;
             WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }
 
         protected override void ConfirmExecute()
         {
-            var materialTransaction = new MaterialTransaction
+            if (CreatedMaterialTransaction is not null)
             {
-                Date = DateOnly.FromDateTime(Date!.Value.Date),
-                MaterialId = SelectedMaterial!.Id,
-                TransactionType = SelectedType!.ValueType,
-                Quantity = Quantity
-            };
+                CreatedMaterialTransaction.Date = DateOnly.FromDateTime(Date!.Value.Date);
+                CreatedMaterialTransaction.Quantity = Quantity;
+                CreatedMaterialTransaction.MaterialId = SelectedMaterial!.Id;
+                CreatedMaterialTransaction.TransactionType = SelectedType!.ValueType;
 
-            CreatedMaterialTransaction = materialTransaction;
+                WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
+            }
+            else
+            {
+                var materialTransaction = new MaterialTransaction
+                {
+                    Date = DateOnly.FromDateTime(Date!.Value.Date),
+                    MaterialId = SelectedMaterial!.Id,
+                    TransactionType = SelectedType!.ValueType,
+                    Quantity = Quantity
+                };
+
+                CreatedMaterialTransaction = materialTransaction;
+            }
 
             WeakReferenceMessenger.Default.Send(new CloseDialogMessage());
         }

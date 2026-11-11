@@ -17,6 +17,7 @@ namespace EquipmentMaintenance.ViewModels
         public async Task LoadDataFromServer()
         {
             var subdivisions = await _crudService.GetRecordsAsync<Subdivision>();
+            Items.Clear();
             Items.AddRange(subdivisions);
         }
 
@@ -24,7 +25,7 @@ namespace EquipmentMaintenance.ViewModels
         {
             var subdivisionViewModel = _subdivisionVmFactory();
 
-            Subdivision? createdSubdivision = await WeakReferenceMessenger.Default.Send(new SubdivisionDialogMessage(subdivisionViewModel));
+            Subdivision? createdSubdivision = await WeakReferenceMessenger.Default.Send(new SubdivisionDialogMessage(subdivisionViewModel, null));
 
             if (createdSubdivision is not null)
             {
@@ -44,7 +45,17 @@ namespace EquipmentMaintenance.ViewModels
 
         protected async override Task RefreshExecute()
         {
-            throw new NotImplementedException();
+            if (SelectedSubdivision is null) return;
+
+            var subdivisionViewModel = _subdivisionVmFactory();
+
+            Subdivision? createdSubdivision = await WeakReferenceMessenger.Default.Send(new SubdivisionDialogMessage(subdivisionViewModel, SelectedSubdivision));
+
+            if (createdSubdivision is not null)
+            {
+                await _crudService.UpdateRecordAsync(createdSubdivision);
+                await LoadDataFromServer();
+            }
         }
     }
 }
