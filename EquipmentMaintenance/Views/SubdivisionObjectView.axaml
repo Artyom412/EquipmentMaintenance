@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="150"
         x:Class="EquipmentMaintenance.Views.SubdivisionObjectView"
         x:DataType="vm:SubdivisionObjectViewModel"
-        Title="SubdivisionObjectView"
+        Title="Подразделение"
         Width="430" Height="150">
 
     <Design.DataContext>

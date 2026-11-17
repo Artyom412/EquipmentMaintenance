@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:EquipmentMaintenance.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EquipmentMaintenance.Views.RecurringFaultsView"
+             x:DataType="vm:RecurringFaultsViewModel">
+    <Grid RowDefinitions="Auto, *" Margin="5">
+        <TableView Grid.Row="1" ItemsSource="{Binding RecurringFaults}" CanUserResizeColumns="False">
+            <TableView.Columns>
+                <TableViewColumn  Header="Неисправность" Binding="{Binding FaultName}"/>
+                <TableViewColumn  Header="Количетсво" Binding="{Binding Quantity}"/>
+            </TableView.Columns>
+        </TableView>
+    </Grid>
+</UserControl>

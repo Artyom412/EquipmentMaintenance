@@ -95,6 +95,10 @@ public partial class App : Application
         services.AddTransient<StatementObjectViewModel>();
         services.AddTransient<Func<StatementObjectViewModel>>(provider => 
             () => provider.GetRequiredService<StatementObjectViewModel>());
+
+        services.AddTransient<AmountOfStatementsReportViewModel>();
+        services.AddTransient<ExpenseOfMaterialViewModel>();
+        services.AddTransient<RecurringFaultsViewModel>();
     }
 
     private static void CreateDatabase()

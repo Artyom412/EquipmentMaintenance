@@ -49,6 +49,57 @@ namespace EquipmentMaintenance.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<ExpenseOfMaterial>> GetExpenseOfMaterial()
+        {
+            await using var context = await contextFactory.CreateDbContextAsync();
+            var report = await context.Statements
+                .AsNoTracking()
+                .GroupBy(m => m.Material.Name)
+                .Select(g => new ExpenseOfMaterial
+                {
+                    MaterialName = g.Key,
+                    Expense = g.Count()
+                })
+                .OrderByDescending(r => r.Expense)
+                .ToListAsync();
+
+            return report;
+        }
+
+        public async Task<IEnumerable<RecurringFaults>> GetRecurringFaults()
+        {
+            await using var context = await contextFactory.CreateDbContextAsync();
+            var report = await context.Statements
+                .AsNoTracking()
+                .GroupBy(f => f.Name)
+                .Select(g => new RecurringFaults
+                {
+                    FaultName = g.Key,
+                    Quantity = g.Count()
+                })
+                .OrderByDescending(r => r.Quantity)
+                .ToListAsync();
+
+            return report;
+        }
+
+        public async Task<IEnumerable<AmountOfStatementsTable>> GetAmountOfStatementsReport()
+        {
+            await using var context = await contextFactory.CreateDbContextAsync();
+            var report = await context.Statements
+                .AsNoTracking()
+                .GroupBy(s => s.Employee.Name)
+                .Select(g => new AmountOfStatementsTable
+                {
+                    NameOfResponsiblePerson = g.Key,
+                    AmountOfStatements = g.Count()
+                })
+                .OrderByDescending(r => r.AmountOfStatements)
+                .ToListAsync();
+
+            return report;
+        }
+
         public async Task UpdateRecordAsync<T>(T entity) where T : class
         {
             await using var context = await contextFactory.CreateDbContextAsync();

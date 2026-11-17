@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="180"
         x:Class="EquipmentMaintenance.Views.EmployeeObjectView"
         x:DataType="vm:EmployeeObjectViewModel"
-        Title="EmployeeObjectView"
+        Title="Сотрудник"
         Width="430" Height="180">
     <Grid RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">

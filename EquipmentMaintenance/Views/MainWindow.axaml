@@ -7,7 +7,7 @@
         x:Class="EquipmentMaintenance.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="EquipmentMaintenance">
+        Title="Учет оргтехники">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -30,10 +30,9 @@
             </MenuItem>
             <MenuItem Header="Заявки" Command="{Binding OpenStatementsListCommand}"/>
             <MenuItem Header="Отчеты">
-                <MenuItem Header="По количемту заявок"/>
-                <MenuItem Header="По загрузке исполнителей"/>
-                <MenuItem Header="По расходу материалов"/>
-                <MenuItem Header="По повторяющимся неисправностям"/>
+                <MenuItem Header="По загрузке исполнителей" Command="{Binding OpenAmountOfStatementsReportCommand}"/>
+                <MenuItem Header="По расходу материалов" Command="{Binding OpenExpenseOfMaterialCommand}"/>
+                <MenuItem Header="По повторяющимся неисправностям" Command="{Binding OpenRecurringFaultsCommand}"/>
             </MenuItem>
         </Menu>
 

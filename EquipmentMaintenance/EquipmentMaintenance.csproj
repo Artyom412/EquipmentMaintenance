@@ -24,4 +24,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AmountOfStatementsReportView.axaml.cs">
+      <DependentUpon>AmountOfStatementsReportView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

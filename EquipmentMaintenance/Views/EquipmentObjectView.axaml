@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="530" d:DesignHeight="270"
         x:Class="EquipmentMaintenance.Views.EquipmentObjectView"
         x:DataType="vm:EquipmentObjectViewModel"
-        Title="EquipmentObjectView"
+        Title="Оборудование"
         Height="270"
         Width="530">
     <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 

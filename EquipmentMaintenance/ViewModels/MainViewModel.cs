@@ -42,4 +42,13 @@ public partial class MainViewModel(INavigationService navigationService) : ViewM
 
     [RelayCommand]
     private void OpenStatementsList() => CurrentViewModel = _navigationService.NavigateTo<StatementListViewModel>();
+    
+    [RelayCommand]
+    private void OpenAmountOfStatementsReport() => CurrentViewModel = _navigationService.NavigateTo<AmountOfStatementsReportViewModel>();
+
+    [RelayCommand]
+    private void OpenExpenseOfMaterial() => CurrentViewModel = _navigationService.NavigateTo<ExpenseOfMaterialViewModel>();
+
+    [RelayCommand]
+    private void OpenRecurringFaults() => CurrentViewModel = _navigationService.NavigateTo<RecurringFaultsViewModel>();
 }

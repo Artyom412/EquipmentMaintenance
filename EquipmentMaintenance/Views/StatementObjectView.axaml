@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="511"
         x:Class="EquipmentMaintenance.Views.StatementObjectView"
         x:DataType="vm:StatementObjectViewModel"
-        Title="StatementObjectView"
+        Title="Заявка"
         Width="450" Height="511">
     <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">

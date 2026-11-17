@@ -6,7 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="465" d:DesignHeight="230"
         x:Class="EquipmentMaintenance.Views.MaterialObjectView"
         x:DataType="vm:MaterialObjectViewModel"
-        Title="MaterialObjectView"
+        Title="Материал"
         Width="465" Height="230">
     <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, Auto" 
           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RowSpacing="10" ColumnSpacing="10" Margin="10">

@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:EquipmentMaintenance.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EquipmentMaintenance.Views.AmountOfStatementsReportView"
+             x:DataType="vm:AmountOfStatementsReportViewModel">
+    <Grid RowDefinitions="Auto, *" Margin="5">
+        <TextBlock Text="{Binding TotalAmountOfStatements, StringFormat='{}Количество заявок: {0}'}" Margin="0 10"/>
+        <TableView Grid.Row="1" ItemsSource="{Binding AmountOfStatements}" CanUserResizeColumns="False">
+            <TableView.Columns>
+                <TableViewColumn  Header="Ответственный" Binding="{Binding NameOfResponsiblePerson}"/>
+                <TableViewColumn  Header="Количество заявок" Binding="{Binding AmountOfStatements}"/>
+            </TableView.Columns>
+        </TableView>
+    </Grid>
+</UserControl>
